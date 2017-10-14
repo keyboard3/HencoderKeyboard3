@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">HenCoder参赛作品by keyboard3</string>
-    <string name="title_flipboard">Flipboard</string>
+    <string name="title_flipboard">Flipboard翻页</string>
+    <string name="title_like">即刻点赞</string>
     <string name="animate">animate</string>
 </resources>

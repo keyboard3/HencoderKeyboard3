@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.keyboard3.hencoderProduct.Like.LikeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2B2B2B">
+
+    <com.keyboard3.hencoderProduct.Like.LikeView
+        android:id="@+id/objectAnimatorView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
+
+    <Button
+        android:id="@+id/animateBt"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="8dp"
+        android:text="@string/animate"
+        android:textSize="16sp" />
+
+</com.keyboard3.hencoderProduct.Like.LikeLayout>
