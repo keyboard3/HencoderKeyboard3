@@ -79,11 +79,6 @@ public class LikeView extends View {
         }
     }
 
-    public void unlike() {
-        mLike = false;
-        animatorSet.start();
-    }
-
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
