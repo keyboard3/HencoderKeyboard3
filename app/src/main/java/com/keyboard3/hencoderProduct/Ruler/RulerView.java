@@ -28,7 +28,7 @@ public class RulerView extends ViewGroup {
     private int centerY;
     private int rulerTop;
     private int rulerBottom;
-    private String currentValue = "0.0";
+    private String currentValue = "00.0";
     private InnerRulerView rulerView;
 
     public RulerView(Context context) {
@@ -113,11 +113,11 @@ public class RulerView extends ViewGroup {
         canvas.drawText(currentValue, centerX, rulerTop - textPadding, paint1);
         //绘制kg
         Rect valueRect = new Rect();
-        paint1.getTextBounds(currentValue, 0, currentValue.length() - 1, valueRect);
+        paint1.getTextBounds("00.0", 0, currentValue.length()-1, valueRect);
         Rect kgRect = new Rect();
         paint1.setTextSize(kgTextSize);
         paint1.getTextBounds("kg", 0, 1, kgRect);
-        canvas.drawText("kg", centerX + valueRect.width() + 15, rulerTop - textPadding - valueRect.height() / 2 + (kgRect.top + kgRect.bottom) / 2, paint1);
+        canvas.drawText("kg", centerX + valueRect.width(), rulerTop - textPadding - valueRect.height() / 2 + (kgRect.top + kgRect.bottom) / 2, paint1);
     }
 
     @Override
