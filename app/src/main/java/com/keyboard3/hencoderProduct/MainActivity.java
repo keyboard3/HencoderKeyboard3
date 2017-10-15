@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         pageModels.add(new PageModel(R.layout.filpboard_layout, R.string.title_flipboard));
         pageModels.add(new PageModel(R.layout.like_layout, R.string.title_like));
         pageModels.add(new PageModel(R.layout.ruler_layout, R.string.title_ruler));
+        pageModels.add(new PageModel(R.layout.move_layout, R.string.title_move));
     }
 
     @Override
