@@ -87,12 +87,32 @@ public class MoveView extends View {
         });
         ObjectAnimator animator1 = ObjectAnimator.ofFloat(this, "translationY", 0, -maxMove);
         animator1.setDuration(500);
+        animator1.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                drawOut = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         ObjectAnimator animator2 = ObjectAnimator.ofFloat(this, "translationY", -maxMove, 0);
         animator2.setDuration(500);
         animator2.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                drawOut = true;
             }
 
             @Override
