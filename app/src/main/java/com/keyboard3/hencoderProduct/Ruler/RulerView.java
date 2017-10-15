@@ -13,23 +13,26 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.keyboard3.hencoderProduct.Utils;
+
 
 public class RulerView extends ViewGroup {
-    Paint paint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
-    Paint paint0 = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-    private int kgTextSize = 24;
-    private int weightTextSize = 70;
-    private int centerDivisionStrokeWidth = 8;
-
-    private int textPadding = 50;
+    Paint mPaint0 = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint mPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
     private AnimatorSet animatorSet = new AnimatorSet();
-    private int centerX;
-    private int centerY;
-    private int rulerTop;
-    private int rulerBottom;
-    private String currentValue = "00.0";
-    private InnerRulerView rulerView;
+    private InnerRulerView mRulerView;
+    private String mCurrentValue = "00.0";
+    private int mBackgroundColor;
+    private int mDefaultColor;
+    private int mValueColor;
+    private int mKgTextSize;
+    private int mWeightTextSize;
+    private int mTextPadding;
+    private int mCenterDivisionStrokeWidth;
+    private int mCenterX;
+    private int mCenterY;
+    private int mRulerTop;
+    private int mRulerBottom;
 
     public RulerView(Context context) {
         super(context);
@@ -47,12 +50,21 @@ public class RulerView extends ViewGroup {
 
     private void init(Context context) {
         setWillNotDraw(false);
-        paint0.setTextAlign(Paint.Align.CENTER);
-        paint0.setColor(Color.parseColor("#dbdeda"));
-        paint1.setTextSize(weightTextSize);
-        paint1.setTextAlign(Paint.Align.CENTER);
-        paint1.setStrokeWidth(centerDivisionStrokeWidth);
-        paint1.setColor(Color.parseColor("#67b77b"));
+        mKgTextSize = (int) Utils.dpToPixel(12);
+        mWeightTextSize = (int) Utils.dpToPixel(35);
+        mTextPadding = (int) Utils.dpToPixel(25);
+        mCenterDivisionStrokeWidth = (int) Utils.dpToPixel(4);
+        mBackgroundColor = Color.parseColor("#f7f9f6");
+        mDefaultColor = Color.parseColor("#dbdeda");
+        mValueColor = Color.parseColor("#67b77b");
+
+        mPaint0.setTextAlign(Paint.Align.CENTER);
+        mPaint0.setColor(mDefaultColor);
+        mPaint1.setTextSize(mWeightTextSize);
+        mPaint1.setTextAlign(Paint.Align.CENTER);
+        mPaint1.setStrokeWidth(mCenterDivisionStrokeWidth);
+        mPaint1.setColor(mValueColor);
+
         addView(new InnerRulerView(context));
     }
 
@@ -62,9 +74,9 @@ public class RulerView extends ViewGroup {
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                String temp = String.format("%.1f", rulerView.currentValue);
-                if (!temp.equals(currentValue)) {
-                    currentValue = temp;
+                String temp = String.format("%.1f", mRulerView.mCurrentValue);
+                if (!temp.equals(mCurrentValue)) {
+                    mCurrentValue = temp;
                     RulerView.this.invalidate();
                 }
             }
@@ -86,65 +98,68 @@ public class RulerView extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        centerX = getWidth() / 2;
-        centerY = getHeight() / 2;
-        rulerTop = centerY - InnerRulerView.rulerHeight / 2;
-        rulerBottom = centerY + InnerRulerView.rulerHeight / 2;
+        mCenterX = getWidth() / 2;
+        mCenterY = getHeight() / 2;
+        mRulerTop = mCenterY - InnerRulerView.RULER_HEIGHT / 2;
+        mRulerBottom = mCenterY + InnerRulerView.RULER_HEIGHT / 2;
 
-        rulerView = (InnerRulerView) getChildAt(0);
-        int allWidth = (100 / (getWidth() / InnerRulerView.bigUnit)) * getWidth();//100个刻度单位的长度
-        rulerView.layout(l, rulerTop, allWidth, rulerBottom);
-        rulerView.setStartValue(1.0f * centerX / InnerRulerView.bigUnit);
-        currentValue = String.format("%.1f", rulerView.currentValue);
+        mRulerView = (InnerRulerView) getChildAt(0);
+        //让尺子实现绘制100个单位
+        int allWidth = (100 / (getWidth() / InnerRulerView.BIG_UNIT)) * getWidth();
+        mRulerView.layout(l, mRulerTop, allWidth, mRulerBottom);
+        mRulerView.setStartValue(1.0f * mCenterX / InnerRulerView.BIG_UNIT);
+        mCurrentValue = String.format("%.1f", mRulerView.mCurrentValue);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         //绘制尺子背景
-        paint0.setColor(Color.parseColor("#f7f9f6"));
-        canvas.drawRect(0, rulerTop, getWidth(), rulerBottom, paint0);
-        paint0.setColor(Color.parseColor("#dbdeda"));
-        paint0.setStrokeWidth(1);
-        canvas.drawLine(0, rulerTop, getWidth(), rulerTop, paint0);
-        canvas.drawLine(0, rulerBottom, getWidth(), rulerBottom, paint0);
+        mPaint0.setColor(mBackgroundColor);
+        canvas.drawRect(0, mRulerTop, getWidth(), mRulerBottom, mPaint0);
+        mPaint0.setColor(mDefaultColor);
+        mPaint0.setStrokeWidth(1);
+        canvas.drawLine(0, mRulerTop, getWidth(), mRulerTop, mPaint0);
+        canvas.drawLine(0, mRulerBottom, getWidth(), mRulerBottom, mPaint0);
         //绘制数值
-        paint1.setTextSize(weightTextSize);
-        canvas.drawText(currentValue, centerX, rulerTop - textPadding, paint1);
+        mPaint1.setTextSize(mWeightTextSize);
+        canvas.drawText(mCurrentValue, mCenterX, mRulerTop - mTextPadding, mPaint1);
         //绘制kg
         Rect valueRect = new Rect();
-        paint1.getTextBounds("00.0", 0, currentValue.length()-1, valueRect);
+        mPaint1.getTextBounds("00.0", 0, mCurrentValue.length() - 1, valueRect);
         Rect kgRect = new Rect();
-        paint1.setTextSize(kgTextSize);
-        paint1.getTextBounds("kg", 0, 1, kgRect);
-        canvas.drawText("kg", centerX + valueRect.width(), rulerTop - textPadding - valueRect.height() / 2 + (kgRect.top + kgRect.bottom) / 2, paint1);
+        mPaint1.setTextSize(mKgTextSize);
+        mPaint1.getTextBounds("kg", 0, 1, kgRect);
+        canvas.drawText("kg", mCenterX + valueRect.width(), mRulerTop - mTextPadding - valueRect.height() / 2 + (kgRect.top + kgRect.bottom) / 2, mPaint1);
     }
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         //中间刻度
-        paint1.setStrokeCap(Paint.Cap.SQUARE);
-        canvas.drawLine(centerX, rulerTop + 4, centerX, rulerTop + InnerRulerView.centerDivisionHeight, paint1);
-        paint1.setStrokeCap(Paint.Cap.ROUND);
-        canvas.drawPoint(centerX, rulerTop + InnerRulerView.centerDivisionHeight + 4, paint1);
+        mPaint1.setStrokeCap(Paint.Cap.SQUARE);
+        canvas.drawLine(mCenterX, mRulerTop + 4, mCenterX, mRulerTop + InnerRulerView.CENTER_DIVISION_HEIGHT, mPaint1);
+        mPaint1.setStrokeCap(Paint.Cap.ROUND);
+        canvas.drawPoint(mCenterX, mRulerTop + InnerRulerView.CENTER_DIVISION_HEIGHT + 4, mPaint1);
     }
 
     public static class InnerRulerView extends View {
-        Paint paint0 = new Paint(Paint.ANTI_ALIAS_FLAG);
-        public float currentValue = 0;
-        protected static int bigUnit = 200;
-        protected static int rulerHeight = 200;
-        private int smallUnit = bigUnit / 10;
-        private int textPaddingTop = 4 * rulerHeight / 5;
-        protected static int centerDivisionHeight = rulerHeight / 2;
-        private int bigDivisionHeight = centerDivisionHeight - 10;
-        private int smallDivisionHeight = bigDivisionHeight / 2;
-        private int divisionTextSize = 36;
-        private int bigCount = 100;
-        private int bigDivisionStrokeWidth = 5;
-        private int smallDivisionStrokeWidth = 3;
-        private float startValue = 0;
+        protected static int BIG_UNIT = 200;
+        protected static int RULER_HEIGHT = 200;
+        protected static int CENTER_DIVISION_HEIGHT = RULER_HEIGHT / 2;
+
+        private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private float mStartValue = 0;
+        private float mCurrentValue = 0;
+        private int mDefaultColor = Color.parseColor("#dbdeda");
+        private int mDivisionTextSize = 36;
+        private int mTextPaddingTop = 4 * RULER_HEIGHT / 5;
+        private int mBigCount = 100;
+        private int mBigDivisionStrokeWidth = 5;
+        private int mBigDivisionHeight = CENTER_DIVISION_HEIGHT - 10;
+        private int mSmallUnit = BIG_UNIT / 10;
+        private int mSmallDivisionStrokeWidth = 3;
+        private int mSmallDivisionHeight = mBigDivisionHeight / 2;
 
         public InnerRulerView(Context context) {
             super(context);
@@ -161,15 +176,15 @@ public class RulerView extends ViewGroup {
         }
 
         private void init() {
-            paint0.setTextSize(divisionTextSize);
-            paint0.setTextAlign(Paint.Align.CENTER);
-            paint0.setColor(Color.parseColor("#dbdeda"));
+            mPaint.setTextSize(mDivisionTextSize);
+            mPaint.setTextAlign(Paint.Align.CENTER);
+            mPaint.setColor(mDefaultColor);
         }
 
         @Override
         public void setTranslationX(float translationX) {
             super.setTranslationX(translationX);
-            currentValue = -(1.0f * translationX / bigUnit) + startValue;
+            mCurrentValue = -(1.0f * translationX / BIG_UNIT) + mStartValue;
         }
 
         @Override
@@ -179,33 +194,30 @@ public class RulerView extends ViewGroup {
 
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-
-            //--绘制大刻度
             int bLeftX = 0, sLeftX = 0;
-            for (int i = 0; i <= bigCount; i++) {
+            for (int i = 0; i <= mBigCount; i++) {
                 //大刻度
-                paint0.setColor(Color.parseColor("#dbdeda"));
-                paint0.setStrokeWidth(bigDivisionStrokeWidth);
-                canvas.drawLine(bLeftX, 0, bLeftX, bigDivisionHeight, paint0);
+                mPaint.setColor(mDefaultColor);
+                mPaint.setStrokeWidth(mBigDivisionStrokeWidth);
+                canvas.drawLine(bLeftX, 0, bLeftX, mBigDivisionHeight, mPaint);
 
                 //小刻度
                 sLeftX = bLeftX;
-                paint0.setStrokeWidth(smallDivisionStrokeWidth);
+                mPaint.setStrokeWidth(mSmallDivisionStrokeWidth);
                 for (int j = 0; j < 9; j++) {
-                    sLeftX += smallUnit;
-                    canvas.drawLine(sLeftX, 0, sLeftX, smallDivisionHeight, paint0);
+                    sLeftX += mSmallUnit;
+                    canvas.drawLine(sLeftX, 0, sLeftX, mSmallDivisionHeight, mPaint);
                 }
 
-                paint0.setColor(Color.parseColor("#000000"));
-                canvas.drawText(i + "", bLeftX, textPaddingTop, paint0);
-                bLeftX += bigUnit;
+                mPaint.setColor(Color.BLACK);
+                canvas.drawText(i + "", bLeftX, mTextPaddingTop, mPaint);
+                bLeftX += BIG_UNIT;
             }
         }
 
-        public void setStartValue(float startValue) {
-            this.startValue = startValue;
-            this.currentValue = startValue;
+        public void setStartValue(float mStartValue) {
+            this.mStartValue = mStartValue;
+            this.mCurrentValue = mStartValue;
         }
     }
-
 }

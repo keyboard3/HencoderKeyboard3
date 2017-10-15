@@ -21,24 +21,27 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.keyboard3.hencoderProduct.R;
+import com.keyboard3.hencoderProduct.Utils;
 
 import java.util.Random;
 
 
 public class MoveView extends View {
-    Paint paint0 = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-    private AnimatorSet animatorSet = new AnimatorSet();
+    private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private AnimatorSet mAnimatorSet = new AnimatorSet();
+    private boolean mDrawInner = false;
+    private boolean mDrawOut = false;
+    private boolean mDrawLoading = true;
+    private String mStepNum;
+    private String mKmNum;
+    private String mCalNum;
+    private Bitmap mWatchBitmap;
+    private Random mRandom;
+    private int transparentWhite;
     private int degree = 0;
+    private int maxMove;
     private int centerX;
     private int centerY;
-    private int maxMove = 100;
-    private boolean drawInner = false;
-    private boolean drawOut = false;
-    private boolean drawLoading = true;
-    private String stepNum = "2274";
-    private Bitmap watchBitmap;
-    private Random random;
 
 
     public MoveView(Context context) {
@@ -52,82 +55,44 @@ public class MoveView extends View {
     public MoveView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setWillNotDraw(false);
-        paint0.setTextAlign(Paint.Align.CENTER);
-        watchBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_watch);
-        random = new Random();
+
+        mPaint.setTextAlign(Paint.Align.CENTER);
+        transparentWhite = Color.parseColor("#00ffffff");
+        maxMove = (int) Utils.dpToPixel(50);
+        mWatchBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_watch);
+        mRandom = new Random();
+        mStepNum = "2274";
+        mKmNum = "1.5公里";
+        mCalNum = "34千卡";
     }
 
     public void startAnimal() {
-        drawInner = false;
-        drawOut = false;
-        drawLoading = true;
+        mDrawInner = false;
+        mDrawOut = false;
+        mDrawLoading = true;
         AnimatorSet animatorSet = new AnimatorSet();
         ObjectAnimator animator0 = ObjectAnimator.ofInt(MoveView.this, "degree", 0, 480);
         animator0.setDuration(3000);
-        animator0.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
+        animator0.addListener(new AnimatorListener() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                drawLoading = false;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
+                mDrawLoading = false;
             }
         });
         ObjectAnimator animator1 = ObjectAnimator.ofFloat(this, "translationY", 0, -maxMove);
         animator1.setDuration(500);
-        animator1.addListener(new Animator.AnimatorListener() {
+        animator1.addListener(new AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                drawOut = true;
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
+                mDrawOut = true;
             }
         });
         ObjectAnimator animator2 = ObjectAnimator.ofFloat(this, "translationY", -maxMove, 0);
         animator2.setDuration(500);
-        animator2.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-            }
-
+        animator2.addListener(new AnimatorListener() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                drawInner = true;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
+                mDrawInner = true;
             }
         });
         animatorSet.playSequentially(animator0, animator1, animator2);
@@ -143,13 +108,13 @@ public class MoveView extends View {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        animatorSet.end();
+        mAnimatorSet.end();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight() + 200);
+        setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight() + 200);//延长内容
     }
 
     @Override
@@ -160,95 +125,88 @@ public class MoveView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        //刚开始外圈旋转 2周
-        //外圈突然消失
-        //整体内容往上移动40
-        //同时 在绘制外圈圆轮廓放大1.3
-        //然后下移 40  缩小至原来大小
-        //然后再绘制出内圈圆
         centerX = getWidth() / 2;
         centerY = getHeight() / 2;
-
-        paint0.setStyle(Paint.Style.FILL);
-        paint0.setTextSize(90);
-        paint0.setColor(Color.parseColor("#ffffff"));
+        //绘制步数
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setTextSize(90);
+        mPaint.setColor(Color.parseColor("#ffffff"));
         Rect stepNumRect = new Rect();
-        paint0.getTextBounds(stepNum, 0, stepNum.length() - 1, stepNumRect);
+        mPaint.getTextBounds(mStepNum, 0, mStepNum.length() - 1, stepNumRect);
         int stepNumBaseY = centerY - (stepNumRect.top + stepNumRect.bottom) / 2;
-        canvas.drawText(stepNum, centerX, stepNumBaseY, paint0);
-
-        paint0.setTextSize(24);
-        paint0.setColor(Color.parseColor("#b1d6f8"));
-        String kmNum = "1.5公里";
+        canvas.drawText(mStepNum, centerX, stepNumBaseY, mPaint);
+        //绘制km
+        mPaint.setTextSize(24);
+        mPaint.setColor(Color.parseColor("#b1d6f8"));
         Rect kmNumRect = new Rect();
-        paint0.getTextBounds(kmNum, 0, kmNum.length() - 1, kmNumRect);
+        mPaint.getTextBounds(mKmNum, 0, mKmNum.length() - 1, kmNumRect);
         int kmNumBaseX = centerX - 20 - (kmNumRect.left + kmNumRect.right) / 2;
         int kmNumBaseY = stepNumBaseY + 30 + kmNumRect.height();
-        canvas.drawText(kmNum, kmNumBaseX, kmNumBaseY, paint0);
-
-        String calNum = "34千卡";
+        canvas.drawText(mKmNum, kmNumBaseX, kmNumBaseY, mPaint);
+        //绘制卡路里
         Rect calNumRect = new Rect();
-        paint0.getTextBounds(calNum, 0, calNum.length() - 1, calNumRect);
+        mPaint.getTextBounds(mCalNum, 0, mCalNum.length() - 1, calNumRect);
         int calNumBaseX = centerX + 20 + (calNumRect.left + calNumRect.right) / 2;
         int calNumBaseY = stepNumBaseY + 30 + kmNumRect.height();
-        canvas.drawText(calNum, calNumBaseX, calNumBaseY, paint0);
-
-        paint0.setStrokeWidth(2);
+        canvas.drawText(mCalNum, calNumBaseX, calNumBaseY, mPaint);
+        //绘制中间线
+        mPaint.setStrokeWidth(2);
         int centerLineTop = kmNumBaseY - kmNumRect.height();
         int centerLineBottom = centerLineTop + kmNumRect.height();
-        canvas.drawLine(centerX, centerLineTop, centerX, centerLineBottom, paint0);
-
-        int watchX = centerX - watchBitmap.getWidth() / 2;
+        canvas.drawLine(centerX, centerLineTop, centerX, centerLineBottom, mPaint);
+        //绘制最底部手表
+        int watchX = centerX - mWatchBitmap.getWidth() / 2;
         int watchY = centerLineBottom + 40;
-        canvas.drawBitmap(watchBitmap, watchX, watchY, paint0);
-
-        if (drawLoading) {
+        canvas.drawBitmap(mWatchBitmap, watchX, watchY, mPaint);
+        //绘制刚开始的加载的旋转动画
+        if (mDrawLoading) {
             canvas.save();
             canvas.rotate(degree, centerX, centerY);
-            Shader mShader = new SweepGradient(centerX, centerY, Color.parseColor("#00ffffff"), Color.WHITE);
-            paint0.setStrokeWidth(1);
-            paint0.setShader(mShader);
-            paint0.setStyle(Paint.Style.STROKE);
+            Shader mShader = new SweepGradient(centerX, centerY, transparentWhite, Color.WHITE);
+            mPaint.setStrokeWidth(1);
+            mPaint.setShader(mShader);
+            mPaint.setStyle(Paint.Style.STROKE);
             int loadingRadius = (int) (0.65 * getMeasuredWidth() / 2);
             RectF loadingCircle = new RectF(centerX - loadingRadius, centerY - loadingRadius, centerX + loadingRadius, centerY + loadingRadius);
             Path loadingPath = new Path();
             float loadingLeft = loadingCircle.left, loadingTop = loadingCircle.top, loadingRight = loadingCircle.right, loadingBottom = loadingCircle.bottom;
             for (int i = 0; i < 20; i++) {
-                int value = random.nextInt(25);
-                int sed = random.nextInt(3);
+                int value = mRandom.nextInt(25);
+                int sed = mRandom.nextInt(3);
                 loadingCircle.left = loadingLeft + value + sed;
                 loadingCircle.top = loadingTop + value - sed;
                 loadingCircle.right = loadingRight - value + sed;
                 loadingCircle.bottom = loadingBottom - value - sed;
                 loadingPath.addArc(loadingCircle, 40, 320);
             }
-            canvas.drawPath(loadingPath, paint0);
+            canvas.drawPath(loadingPath, mPaint);
 
             loadingPath.reset();
             int decorPointX = centerX + loadingRadius;
             int decorPointY = centerY + 5;
             int tempX, tempY;
             for (int i = 0; i < 10; i++) {
-                int value0 = random.nextInt(i + 20);
-                int value = i * 2 + random.nextInt(i + 20);
+                int value0 = mRandom.nextInt(i + 20);
+                int value = i * 2 + mRandom.nextInt(i + 20);
                 tempX = decorPointX - value0;
                 tempY = decorPointY - i * 2 - value;
                 loadingPath.addCircle(tempX, tempY, 5, Path.Direction.CCW);
             }
-            paint0.setStyle(Paint.Style.FILL);
-            canvas.drawPath(loadingPath, paint0);
-            paint0.setShader(null);
+            mPaint.setStyle(Paint.Style.FILL);
+            canvas.drawPath(loadingPath, mPaint);
+            mPaint.setShader(null);
             canvas.restore();
         }
-        if (drawOut) {
+        //绘制外轮廓
+        if (mDrawOut) {
             int outRadius = (int) ((0.65 + 0.15 * getPercent()) * getMeasuredWidth() / 2);
-            paint0.setStrokeWidth(25);
-            paint0.setStyle(Paint.Style.STROKE);
-            canvas.drawCircle(centerX, centerY, outRadius, paint0);
+            mPaint.setStrokeWidth(25);
+            mPaint.setStyle(Paint.Style.STROKE);
+            canvas.drawCircle(centerX, centerY, outRadius, mPaint);
         }
-
-        if (drawInner) {
-            paint0.setStrokeWidth(5);
+        //绘制内轮廓
+        if (mDrawInner) {
+            mPaint.setStrokeWidth(5);
             int innerRadius = (int) (0.55 * getMeasuredWidth() / 2);
             int startRunAngle = -90, runedAngle = 270, startUnRunAngle = startRunAngle + runedAngle, unRunedAngle = 360 - runedAngle;
             RectF innerCircle = new RectF(centerX - innerRadius, centerY - innerRadius, centerX + innerRadius, centerY + innerRadius);
@@ -256,14 +214,14 @@ public class MoveView extends View {
             PathEffect effects = new DashPathEffect(new float[]{2, 4}, 1);
             Path unRunPath = new Path();
             unRunPath.addArc(innerCircle, startUnRunAngle, unRunedAngle);
-            paint0.setPathEffect(effects);
-            canvas.drawPath(unRunPath, paint0);
-            paint0.setPathEffect(null);
+            mPaint.setPathEffect(effects);
+            canvas.drawPath(unRunPath, mPaint);
+            mPaint.setPathEffect(null);
 
-            paint0.setColor(Color.parseColor("#ffffff"));
+            mPaint.setColor(Color.WHITE);
             Path runedPath = new Path();
             runedPath.addArc(innerCircle, startRunAngle, runedAngle);
-            canvas.drawPath(runedPath, paint0);
+            canvas.drawPath(runedPath, mPaint);
         }
     }
 
@@ -277,8 +235,32 @@ public class MoveView extends View {
         invalidate();
     }
 
+    @SuppressWarnings("unused")
     public void setDegree(int degree) {
         this.degree = degree;
         invalidate();
+    }
+
+    public abstract class AnimatorListener implements Animator.AnimatorListener {
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+
+        }
     }
 }
