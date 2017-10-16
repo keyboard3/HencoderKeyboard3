@@ -23,19 +23,17 @@ public class FlipboardView extends View {
 
     public FlipboardView(Context context) {
         super(context);
-        init();
     }
 
     public FlipboardView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
 
     public FlipboardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
     }
 
-    private void init() {
+    {
         mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.filpboard);
     }
 

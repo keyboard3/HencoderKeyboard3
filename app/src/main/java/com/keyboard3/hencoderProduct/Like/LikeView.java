@@ -38,19 +38,17 @@ public class LikeView extends View {
 
     public LikeView(Context context) {
         super(context);
-        init();
     }
 
     public LikeView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
 
     public LikeView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
     }
 
-    private void init() {
+    {
         mMoveY = (int) Utils.dpToPixel(20);
         mTextSize = (int) Utils.dpToPixel(12);
         mTextPadding = (int) Utils.dpToPixel(25);

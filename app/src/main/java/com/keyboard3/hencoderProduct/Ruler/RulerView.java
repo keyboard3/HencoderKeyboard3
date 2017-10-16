@@ -36,19 +36,17 @@ public class RulerView extends ViewGroup {
 
     public RulerView(Context context) {
         super(context);
-        init(context);
     }
 
     public RulerView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
 
     public RulerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
     }
 
-    private void init(Context context) {
+    {
         setWillNotDraw(false);
         mKgTextSize = (int) Utils.dpToPixel(12);
         mWeightTextSize = (int) Utils.dpToPixel(35);
@@ -65,7 +63,7 @@ public class RulerView extends ViewGroup {
         mPaint1.setStrokeWidth(mCenterDivisionStrokeWidth);
         mPaint1.setColor(mValueColor);
 
-        addView(new InnerRulerView(context));
+        addView(new InnerRulerView(getContext()));
     }
 
     public void moveTranslationX(int translationX) {

@@ -49,13 +49,15 @@ public class MoveView extends View {
     }
 
     public MoveView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
 
     public MoveView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setWillNotDraw(false);
+    }
 
+    {
+        setWillNotDraw(false);
         mPaint.setTextAlign(Paint.Align.CENTER);
         transparentWhite = Color.parseColor("#00ffffff");
         maxMove = (int) Utils.dpToPixel(50);
