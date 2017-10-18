@@ -1,5 +1,6 @@
 package com.keyboard3.hencoderProduct.Like;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,16 +22,18 @@ public class LikeView extends View {
     private Paint mPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint mPaint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
     private ObjectAnimator mAnimator;
-    private Integer mDrawNum = 314;//当前赞数量
+    private int mCurNum = 9;//当前赞数量
+    private int mNewNum = mCurNum;//当前赞数量
     private int translationY;
+    private boolean liked = false;
     private int mMoveY;//至少的文字的移动位置
     private int mMaxLen = 3;//最多支持多少点赞数 999
+    private boolean limitMax = true;//是否限制长度 即补充前空
     private int mTextSize;
     private int mTextPadding;
     private int mAnimTime = 500;
     private int centerX;
     private int centerY;
-    private boolean mLike = false;//点赞和取消赞操作
     private Bitmap mUnlikeBitmap;
     private Bitmap mLikedBitmap;
     private Bitmap mShiningBitmap;
@@ -65,20 +68,40 @@ public class LikeView extends View {
         mShiningBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_messages_like_selected_shining);
 
         mAnimator = ObjectAnimator.ofInt(this, "translationY", 0, mMoveY);
+        mAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mCurNum = mNewNum;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         mAnimator.setDuration(mAnimTime);
     }
 
     public boolean isLiked() {
-        return mLike;
+        return mNewNum > mCurNum;
     }
 
     public void setLike(boolean isLike) {
-        if (mLike != isLike) {
-            mLike = isLike;
-            mAnimator.start();
-        } else {
-            mLike = isLike;
-        }
+        if (mCurNum == 0 && !isLike) return;
+        if (isLike && (mCurNum + 1 + "").length() > mMaxLen) return;
+        mNewNum = isLike ? mNewNum + 1 : mNewNum - 1;
+        mAnimator.start();
+        liked = isLike;
     }
 
     @Override
@@ -96,7 +119,6 @@ public class LikeView extends View {
         super.onDraw(canvas);
         centerX = getWidth() / 2;
         centerY = getHeight() / 2;
-        String text = mDrawNum.toString();
         int leftX = centerX;
 
         //绘制点赞图片
@@ -107,13 +129,13 @@ public class LikeView extends View {
         //绘制数字 相对居中
         Rect rect = new Rect();
         mPaint0.getTextBounds("0", 0, 1, rect);
-        drawNum(canvas, text, leftX, centerY - (rect.top + rect.bottom) / 2);
-
+        drawNum(canvas, leftX, centerY - (rect.top + rect.bottom) / 2, mCurNum, mNewNum);
         //绘制闪光
         drawShining(canvas, likeTop, likeLeft);
     }
 
     private void drawLike(Canvas canvas, int likeTop, int likeLeft) {
+        boolean mLike = liked;
         if (mLike && getAnimPercent() > 0.9 && getAnimPercent() < 1) {//放大
             canvas.save();
             canvas.translate((float) (likeLeft - mLikedBitmap.getWidth() * 0.05), (float) (likeTop - mLikedBitmap.getHeight() * 0.05));
@@ -128,7 +150,7 @@ public class LikeView extends View {
     }
 
     private void drawShining(Canvas canvas, int likeTop, int likeLeft) {
-        if (mLike) {
+        if (liked) {
             float scale = getAnimPercent();
             int shiningTop = (int) (likeTop - scale * mShiningBitmap.getHeight() / 2);
             int shiningLeft = (int) (likeLeft + (mLikedBitmap.getWidth() - scale * mShiningBitmap.getWidth()) / 2);
@@ -145,47 +167,90 @@ public class LikeView extends View {
         return 1.0F * translationY / mMoveY;
     }
 
-    private void drawNum(Canvas canvas, String text, int leftX, int baseTxtY) {
-        for (int i = 0; i < mMaxLen; i++) {
-            if (mMaxLen - i <= text.length()) {
-                int textIndex = text.length() - mMaxLen + i;//计算出实际的数组的开头
-                leftX += i > 0 ? mPaint0.measureText(text.substring(textIndex, textIndex + 1)) : 0;
-                if (textIndex == text.length() - 1) {
-                    optDrawNum(canvas, leftX, baseTxtY, text.substring(textIndex, textIndex + 1), false);
-                } else {
-                    optDrawNum(canvas, leftX, baseTxtY, text.substring(textIndex, textIndex + 1), true);
-                }
-            } else {//给前面留位置 方面递增
-                leftX += mPaint0.measureText(" ");
-                canvas.drawText(" ", leftX, baseTxtY, mPaint0);
+    private void drawNum(Canvas canvas, int leftX, int baseTxtY, int curNum, int newNum) {
+        String curNumStr = (curNum + "").toString();
+        String newNumStr = (newNum + "").toString();
+        if (limitMax) {
+            float emptyLen = mPaint0.measureText("0");
+            leftX += (mMaxLen - Math.max(curNumStr.length(), newNumStr.length())) * emptyLen;
+        }
+        if (newNum < curNum) {//-1 下降滑动
+            boolean lengthChange = false;
+            if (newNumStr.length() < curNumStr.length()) {
+                lengthChange = true;
+            }
+            int sumLeft = leftX;
+            String tempNumStr = curNumStr;
+            for (int i = 0; i < tempNumStr.length(); i++) {
+                float len = i == 0 ? 0 : mPaint0.measureText(tempNumStr.substring(i - 1, i));
+                sumLeft += len;
+                String curBitStr = curNumStr.substring(i, i + 1);
+                String newBitStr = "";
+                if (lengthChange && i == 0) newBitStr = " ";
+                else if (lengthChange) newBitStr = newNumStr.substring(i - 1, i);
+                else newBitStr = newNumStr.substring(i, i + 1);
+                optDrawNum(canvas, sumLeft, baseTxtY, curBitStr, newBitStr, false);
+            }
+        } else if (newNum > curNum) {//+1 上升滑动
+            //长度发生变化
+            boolean lengthChange = false;
+            if (newNumStr.length() > curNumStr.length()) {
+                lengthChange = true;
+            }
+            int sumLeft = leftX;
+            String tempNumStr = newNumStr;
+            for (int i = 0; i < tempNumStr.length(); i++) {
+                float len = i == 0 ? 0 : mPaint0.measureText(tempNumStr.substring(i - 1, i));
+                sumLeft += len;
+                String curBitStr = "";
+                if (lengthChange && i == 0) curBitStr = " ";
+                else if (lengthChange) curBitStr = curNumStr.substring(i - 1, i);
+                else curBitStr = curNumStr.substring(i, i + 1);
+                String newBitStr = newNumStr.substring(i, i + 1);
+                optDrawNum(canvas, sumLeft, baseTxtY, curBitStr, newBitStr, true);
+            }
+        } else if (newNum == curNum) {//纯绘制数字
+            int sumLeft = leftX;
+            String tempNumStr = curNumStr;
+            for (int i = 0; i < tempNumStr.length(); i++) {
+                float len = i == 0 ? 0 : mPaint0.measureText(tempNumStr.substring(i - 1, i));
+                sumLeft += len;
+                String curBitStr = tempNumStr.substring(i, i + 1);
+                String newBitStr = tempNumStr.substring(i, i + 1);
+                optDrawNum(canvas, sumLeft, baseTxtY, curBitStr, newBitStr);
             }
         }
     }
 
-    private void optDrawNum(Canvas canvas, int leftX, int baseTxtY, String num, boolean isNormal) {
-        int value1 = Integer.parseInt(num);
-        if (!isNormal) {//回溯操作之前的值
-            value1 = (10 + value1 - getAddOrDecentNum()) % 10;
-        }
-        int value2 = (10 + value1 + getAddOrDecentNum()) % 10;
-        int alpha = (int) ((1 - 1.0 * translationY / mMoveY) * 255);
-
-        mPaint1.setAlpha(alpha);
-        mPaint2.setAlpha(255 - alpha);
-
-        if (isNormal) {
-            canvas.drawText(value1 + "", leftX, baseTxtY, mPaint0);
-        } else if (mLike) {
-            canvas.drawText(value1 + "", leftX, baseTxtY + translationY, mPaint1);
-            canvas.drawText(value2 + "", leftX, baseTxtY - mMoveY + translationY, mPaint2);
-        } else {
-            canvas.drawText(value1 + "", leftX, baseTxtY - translationY, mPaint1);
-            canvas.drawText(value2 + "", leftX, baseTxtY + mMoveY - translationY, mPaint2);
-        }
+    private void optDrawNum(Canvas canvas, int leftX, int baseTxtY, String curNum, String newNum) {
+        optDrawNum(canvas, leftX, baseTxtY, curNum, newNum, false);
     }
 
-    private int getAddOrDecentNum() {
-        return mLike ? 1 : -1;
+    private void optDrawNum(Canvas canvas, int leftX, int baseTxtY, String curNum, String newNum, boolean upOrDown) {
+        if (curNum.equals(newNum)) {
+            canvas.drawText(curNum, leftX, baseTxtY, mPaint0);
+            return;
+        }
+        int alpha = (int) ((1 - 1.0 * translationY / mMoveY) * 255);
+        mPaint1.setAlpha(alpha);//当前 消失
+        mPaint2.setAlpha(255 - alpha);//当前 显示
+        int curBaseY = baseTxtY;
+        int newBaseY, transY;
+        if (upOrDown) {//up +1
+            transY = -translationY;//上移
+            newBaseY = baseTxtY + mMoveY;
+        } else {//down -1
+            transY = translationY;//下移
+            newBaseY = baseTxtY - mMoveY;
+        }
+        canvas.drawText(curNum, leftX, curBaseY + transY, mPaint1);
+        canvas.drawText(newNum, leftX, newBaseY + transY, mPaint2);
+    }
+
+    public void setDrawNum(Integer mDrawNum) {
+        this.mCurNum = mDrawNum;
+        this.mNewNum = mDrawNum;
+        invalidate();
     }
 
     @SuppressWarnings("unused")
