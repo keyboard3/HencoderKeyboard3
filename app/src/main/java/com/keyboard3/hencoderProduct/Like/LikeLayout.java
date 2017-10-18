@@ -14,8 +14,6 @@ public class LikeLayout extends RelativeLayout {
     LikeView view;
     Button animateBt;
     private EditText etNum;
-    private Button addBtn;
-    private Button decentBtn;
 
     public LikeLayout(Context context) {
         super(context);
@@ -35,35 +33,15 @@ public class LikeLayout extends RelativeLayout {
 
         view = (LikeView) findViewById(R.id.objectAnimatorView);
         etNum = (EditText) findViewById(R.id.editNum);
-        addBtn = (Button) findViewById(R.id.addBtn);
-        decentBtn = (Button) findViewById(R.id.decentBtn);
         animateBt = (Button) findViewById(R.id.animateBt);
 
         OnClickListener listener = new OnClickListener() {
             @Override
             public void onClick(View v) {
                 view.setDrawNum(Integer.parseInt(etNum.getText().toString()));
+                view.clear();
             }
         };
-        addBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                view.setLike(true);
-            }
-        });
-        decentBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                view.setLike(false);
-            }
-        });
         animateBt.setOnClickListener(listener);
-        view.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                view.setLike(!view.isLiked());
-            }
-        });
     }
 }

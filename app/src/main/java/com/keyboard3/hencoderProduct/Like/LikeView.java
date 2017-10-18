@@ -27,8 +27,7 @@ public class LikeView extends View {
     private int translationY;
     private boolean liked = false;
     private int mMoveY;//至少的文字的移动位置
-    private int mMaxLen = 3;//最多支持多少点赞数 999
-    private boolean limitMax = true;//是否限制长度 即补充前空
+    private int mMaxLen = 0;
     private int mTextSize;
     private int mTextPadding;
     private int mAnimTime = 500;
@@ -52,6 +51,7 @@ public class LikeView extends View {
     }
 
     {
+        mMaxLen = 0;
         mMoveY = (int) Utils.dpToPixel(20);
         mTextSize = (int) Utils.dpToPixel(12);
         mTextPadding = (int) Utils.dpToPixel(25);
@@ -90,19 +90,42 @@ public class LikeView extends View {
             }
         });
         mAnimator.setDuration(mAnimTime);
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (!mAnimator.isRunning()) {
+                    if (isLiked()) {
+                        if (mCurNum != 0)
+                            mNewNum = mCurNum - 1;
+                    } else {
+                        mNewNum = mCurNum + 1;
+                    }
+                    liked = !isLiked();
+                    mAnimator.start();
+                }
+            }
+        });
+    }
+
+    public void clear() {
+        mMaxLen = 0;
     }
 
     public boolean isLiked() {
-        return mNewNum > mCurNum;
+        return liked;
     }
 
     public void setLike(boolean isLike) {
-        if (mCurNum == 0 && !isLike) return;
-        if (isLike && (mCurNum + 1 + "").length() > mMaxLen) return;
-        mNewNum = isLike ? mNewNum + 1 : mNewNum - 1;
-        mAnimator.start();
+        if (liked) {
+            setTranslationY(mMoveY);
+        } else {
+            setTranslationY(0);
+        }
         liked = isLike;
+        invalidate();
     }
+
 
     @Override
     protected void onAttachedToWindow() {
@@ -170,10 +193,8 @@ public class LikeView extends View {
     private void drawNum(Canvas canvas, int leftX, int baseTxtY, int curNum, int newNum) {
         String curNumStr = (curNum + "").toString();
         String newNumStr = (newNum + "").toString();
-        if (limitMax) {
-            float emptyLen = mPaint0.measureText("0");
-            leftX += (mMaxLen - Math.max(curNumStr.length(), newNumStr.length())) * emptyLen;
-        }
+        mMaxLen = Math.max(Math.max(curNumStr.length(), newNumStr.length()), mMaxLen);
+
         if (newNum < curNum) {//-1 下降滑动
             boolean lengthChange = false;
             if (newNumStr.length() < curNumStr.length()) {
@@ -210,6 +231,9 @@ public class LikeView extends View {
                 optDrawNum(canvas, sumLeft, baseTxtY, curBitStr, newBitStr, true);
             }
         } else if (newNum == curNum) {//纯绘制数字
+            float emptyLen = mPaint0.measureText("0");
+            leftX += (mMaxLen - curNumStr.length()) * emptyLen;//处理100-99 位移的情况
+
             int sumLeft = leftX;
             String tempNumStr = curNumStr;
             for (int i = 0; i < tempNumStr.length(); i++) {
