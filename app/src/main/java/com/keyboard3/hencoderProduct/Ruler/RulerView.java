@@ -103,7 +103,7 @@ public class RulerView extends ViewGroup {
 
         mRulerView = (InnerRulerView) getChildAt(0);
         //让尺子实现绘制100个单位
-        int allWidth = (100 / (getWidth() / InnerRulerView.BIG_UNIT)) * getWidth();
+        int allWidth = (InnerRulerView.BIG_COUNT / (getWidth() / InnerRulerView.BIG_UNIT)) * getWidth();
         mRulerView.layout(l, mRulerTop, allWidth, mRulerBottom);
         mRulerView.setStartValue(1.0f * mCenterX / InnerRulerView.BIG_UNIT);
         mCurrentValue = String.format("%.1f", mRulerView.mCurrentValue);
@@ -142,38 +142,36 @@ public class RulerView extends ViewGroup {
     }
 
     public static class InnerRulerView extends View {
-        protected static int BIG_UNIT = 200;
-        protected static int RULER_HEIGHT = 200;
+        protected static int BIG_UNIT = (int) Utils.dpToPixel(100);
+        protected static int RULER_HEIGHT = (int) Utils.dpToPixel(100);
         protected static int CENTER_DIVISION_HEIGHT = RULER_HEIGHT / 2;
+        protected static int BIG_COUNT = 100;
 
         private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private float mStartValue = 0;
         private float mCurrentValue = 0;
         private int mDefaultColor = Color.parseColor("#dbdeda");
-        private int mDivisionTextSize = 36;
+        private int mDivisionTextSize = (int) Utils.dpToPixel(18);
         private int mTextPaddingTop = 4 * RULER_HEIGHT / 5;
-        private int mBigCount = 100;
         private int mBigDivisionStrokeWidth = 5;
         private int mBigDivisionHeight = CENTER_DIVISION_HEIGHT - 10;
         private int mSmallUnit = BIG_UNIT / 10;
-        private int mSmallDivisionStrokeWidth = 3;
+        private int mSmallDivisionStrokeWidth = (int) Utils.dpToPixel(2);
         private int mSmallDivisionHeight = mBigDivisionHeight / 2;
 
         public InnerRulerView(Context context) {
             super(context);
-            init();
         }
 
         public InnerRulerView(Context context, @Nullable AttributeSet attrs) {
-            this(context, attrs, 0);
+            super(context, attrs);
         }
 
         public InnerRulerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
-            init();
         }
 
-        private void init() {
+        {
             mPaint.setTextSize(mDivisionTextSize);
             mPaint.setTextAlign(Paint.Align.CENTER);
             mPaint.setColor(mDefaultColor);
@@ -193,7 +191,7 @@ public class RulerView extends ViewGroup {
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             int bLeftX = 0, sLeftX = 0;
-            for (int i = 0; i <= mBigCount; i++) {
+            for (int i = 0; i <= BIG_COUNT; i++) {
                 //大刻度
                 mPaint.setColor(mDefaultColor);
                 mPaint.setStrokeWidth(mBigDivisionStrokeWidth);
