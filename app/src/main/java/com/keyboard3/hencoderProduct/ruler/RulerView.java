@@ -1,4 +1,4 @@
-package com.keyboard3.hencoderProduct.Ruler;
+package com.keyboard3.hencoderProduct.ruler;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -16,6 +16,9 @@ import android.view.ViewGroup;
 import com.keyboard3.hencoderProduct.Utils;
 
 
+/**
+ * @author keyboard3
+ */
 public class RulerView extends ViewGroup {
     Paint mPaint0 = new Paint(Paint.ANTI_ALIAS_FLAG);
     Paint mPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -188,6 +191,7 @@ public class RulerView extends ViewGroup {
             super.onLayout(changed, left, top, right, bottom);
         }
 
+        @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             int bLeftX = 0, sLeftX = 0;

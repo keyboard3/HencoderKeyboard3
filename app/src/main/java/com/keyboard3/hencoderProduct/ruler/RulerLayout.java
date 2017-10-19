@@ -1,4 +1,4 @@
-package com.keyboard3.hencoderProduct.MIMovement;
+package com.keyboard3.hencoderProduct.ruler;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,19 +9,19 @@ import android.widget.RelativeLayout;
 import com.keyboard3.hencoderProduct.R;
 
 
-public class MoveLayout extends RelativeLayout {
-    MoveView view;
+public class RulerLayout extends RelativeLayout {
+    RulerView view;
     Button animateBt;
 
-    public MoveLayout(Context context) {
+    public RulerLayout(Context context) {
         super(context);
     }
 
-    public MoveLayout(Context context, AttributeSet attrs) {
+    public RulerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MoveLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RulerLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -29,13 +29,17 @@ public class MoveLayout extends RelativeLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        view = (MoveView) findViewById(R.id.objectAnimatorView);
+        view = (RulerView) findViewById(R.id.objectAnimatorView);
         animateBt = (Button) findViewById(R.id.animateBt);
 
         OnClickListener listener = new OnClickListener() {
+
+            private int translationX = 600;
+
             @Override
             public void onClick(View v) {
-                view.startAnimal();
+                translationX += 600;
+                view.moveTranslationX(translationX);
             }
         };
         animateBt.setOnClickListener(listener);

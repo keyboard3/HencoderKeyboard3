@@ -1,4 +1,4 @@
-package com.keyboard3.hencoderProduct.Filpboard;
+package com.keyboard3.hencoderProduct.filpboard;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,12 +13,15 @@ import android.view.View;
 import com.keyboard3.hencoderProduct.R;
 
 
+/**
+ * @author keyboard3
+ */
 public class FlipboardView extends View {
     private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Camera mCamera = new Camera();
     private Bitmap mBitmap;
-    private int turnoverDegreeFirst;//翻折
-    private int turnoverDegreeLast;//翻折
+    private int turnoverDegreeFirst;
+    private int turnoverDegreeLast;
     private int degree;
 
     public FlipboardView(Context context) {
@@ -54,6 +57,7 @@ public class FlipboardView extends View {
         super.onDetachedFromWindow();
     }
 
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 

@@ -1,4 +1,4 @@
-package com.keyboard3.hencoderProduct.Like;
+package com.keyboard3.hencoderProduct.like;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.keyboard3.hencoderProduct.Ruler.RulerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.keyboard3.hencoderProduct.ruler.RulerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.keyboard3.hencoderProduct.Ruler.RulerView
+    <com.keyboard3.hencoderProduct.ruler.RulerView
         android:id="@+id/objectAnimatorView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,4 +19,4 @@
         android:text="@string/animate"
         android:textSize="16sp" />
 
-</com.keyboard3.hencoderProduct.Ruler.RulerLayout>
+</com.keyboard3.hencoderProduct.ruler.RulerLayout>

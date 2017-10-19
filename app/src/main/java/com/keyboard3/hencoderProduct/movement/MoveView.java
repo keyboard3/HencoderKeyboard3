@@ -1,4 +1,4 @@
-package com.keyboard3.hencoderProduct.MIMovement;
+package com.keyboard3.hencoderProduct.movement;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -26,6 +26,9 @@ import com.keyboard3.hencoderProduct.Utils;
 import java.util.Random;
 
 
+/**
+ * @author keyboard3
+ */
 public class MoveView extends View {
     private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private AnimatorSet mAnimatorSet = new AnimatorSet();

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.keyboard3.hencoderProduct.Like.LikeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.keyboard3.hencoderProduct.like.LikeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#2B2B2B">
 
-    <com.keyboard3.hencoderProduct.Like.LikeView
+    <com.keyboard3.hencoderProduct.like.LikeView
         android:id="@+id/objectAnimatorView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,4 +31,4 @@
         android:text="set"
         android:textSize="16sp" />
 
-</com.keyboard3.hencoderProduct.Like.LikeLayout>
+</com.keyboard3.hencoderProduct.like.LikeLayout>

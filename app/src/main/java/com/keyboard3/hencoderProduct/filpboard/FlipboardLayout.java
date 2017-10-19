@@ -1,11 +1,10 @@
-package com.keyboard3.hencoderProduct.Filpboard;
+package com.keyboard3.hencoderProduct.filpboard;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
