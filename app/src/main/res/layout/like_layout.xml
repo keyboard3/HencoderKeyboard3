@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.keyboard3.hencoderProduct.like.LikeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#2B2B2B">
+    android:layout_height="match_parent">
 
     <com.keyboard3.hencoderProduct.like.LikeView
         android:id="@+id/objectAnimatorView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="#2B2B2B">
+    </com.keyboard3.hencoderProduct.like.LikeView>
 
     <EditText
         android:id="@+id/editNum"
@@ -19,7 +20,7 @@
         android:background="#fff"
         android:gravity="center_horizontal"
         android:inputType="number"
-        android:text="9" />
+        android:text="29" />
 
     <Button
         android:id="@+id/animateBt"
