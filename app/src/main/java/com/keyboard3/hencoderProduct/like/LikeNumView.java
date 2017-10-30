@@ -1,7 +1,5 @@
 package com.keyboard3.hencoderProduct.like;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.keyboard3.hencoderProduct.Utils;
@@ -20,15 +17,13 @@ import com.keyboard3.hencoderProduct.Utils;
  */
 public class LikeNumView extends View {
     private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private ObjectAnimator mAnimator;
-    private int mCurNum = 1009;
-    private int mNewNum = mCurNum;
+    private int mCurNum = 0;
+    private int mNewNum = 0;
     private int translationY;
     private boolean liked = false;
     private int mMoveY;
     private int mMaxLen = 0;
     private int mTextSize;
-    private int mAnimTime = 500;
     private int centerX;
     private int centerY;
 
@@ -50,42 +45,17 @@ public class LikeNumView extends View {
 
         mPaint.setTextSize(mTextSize);
         mPaint.setColor(Color.parseColor("#c3c4c3"));
-
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mAnimator.isRunning()) {
-                    if (isLiked()) {
-                        if (mCurNum != 0) {
-                            mNewNum = mCurNum - 1;
-                        }
-                    } else {
-                        mNewNum = mCurNum + 1;
-                    }
-                    liked = !isLiked();
-                    mAnimator.start();
-                }
-            }
-        });
     }
 
-    public void clear() {
+    protected void setNum(int num) {
+        mCurNum = mNewNum = num;
         mMaxLen = 0;
-    }
-
-    public boolean isLiked() {
-        return liked;
+        invalidate();
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        mAnimator.end();
     }
 
     @Override
@@ -95,9 +65,10 @@ public class LikeNumView extends View {
         mPaint.getTextBounds(curNum + "0", 0, curNum.length() + 1, rect);
         int width = rect.width();
         int height = mTextSize * 3;
-        int specMode = View.MeasureSpec.getMode(heightMeasureSpec);
+        int heightSpecMode = View.MeasureSpec.getMode(heightMeasureSpec);
         int specSize = View.MeasureSpec.getSize(heightMeasureSpec);
-        switch (specMode) {
+        int widthSpecSize = View.MeasureSpec.getSize(widthMeasureSpec);
+        switch (heightSpecMode) {
             case MeasureSpec.UNSPECIFIED:
             case MeasureSpec.AT_MOST:
                 break;
@@ -108,9 +79,24 @@ public class LikeNumView extends View {
                 break;
             default:
         }
+        width = Math.max(widthSpecSize, width);
         setMeasuredDimension(width, height);
-        mMoveY = (height - mTextSize) / 2;
-        createAnim();
+        mMoveY = height / 2;
+    }
+
+    protected void changeLike(boolean isLike) {
+        if (isLike) {
+            if (mCurNum != 0) {
+                mNewNum = mCurNum - 1;
+            }
+        } else {
+            mNewNum = mCurNum + 1;
+        }
+        liked = !isLike;
+    }
+
+    protected void init() {
+        mCurNum = mNewNum;
     }
 
     @Override
@@ -218,30 +204,8 @@ public class LikeNumView extends View {
         mPaint.setAlpha(255);
     }
 
-    private void createAnim() {
-        mAnimator = ObjectAnimator.ofInt(this, "translationY", 0, mMoveY);
-        mAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mCurNum = mNewNum;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        mAnimator.setDuration(mAnimTime);
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 
     public void setDrawNum(Integer mDrawNum) {

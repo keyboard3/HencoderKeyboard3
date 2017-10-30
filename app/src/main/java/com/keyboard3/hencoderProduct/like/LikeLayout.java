@@ -31,17 +31,16 @@ public class LikeLayout extends RelativeLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-       /* view = (LikeView) findViewById(R.id.objectAnimatorView);
+        view = (LikeView) findViewById(R.id.objectAnimatorView);
         etNum = (EditText) findViewById(R.id.editNum);
-        animateBt = (Button) findViewById(R.id.animateBt);*/
+        animateBt = (Button) findViewById(R.id.animateBt);
 
         OnClickListener listener = new OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* view.setDrawNum(Integer.parseInt(etNum.getText().toString()));
-                view.clear();*/
+                view.setNum(Integer.parseInt(etNum.getText().toString()));
             }
         };
-        //animateBt.setOnClickListener(listener);
+        animateBt.setOnClickListener(listener);
     }
 }

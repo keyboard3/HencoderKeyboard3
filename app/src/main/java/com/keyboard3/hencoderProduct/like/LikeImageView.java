@@ -1,6 +1,5 @@
 package com.keyboard3.hencoderProduct.like;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,12 +21,12 @@ public class LikeImageView extends View {
     private Paint mImagePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private boolean liked = false;
     private float animProgress;
-    private int mAnimTime = 500;
     private Bitmap mUnlikeBitmap;
     private Bitmap mLikedBitmap;
     private Bitmap mShiningBitmap;
-    ObjectAnimator mAnimator;
+    protected int spacePadding;
     private int startX;
+    private int centerY;
 
     public LikeImageView(Context context) {
         super(context);
@@ -46,41 +45,30 @@ public class LikeImageView extends View {
         mUnlikeBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_messages_like_unselected);
         mLikedBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_messages_like_selected);
         mShiningBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_messages_like_selected_shining);
-        startX = (int) (mLikedBitmap.getWidth() * 0.05);
-        createAnim();
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mAnimator.isRunning()) {
-                    liked = !liked;
-                }
-                mAnimator.start();
-            }
-        });
+        startX = (int) (mLikedBitmap.getWidth() * 0.1) + spacePadding / 2;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = (int) (mLikedBitmap.getWidth() * 1.1);
         int height = mLikedBitmap.getHeight() + mShiningBitmap.getHeight();
-        setMeasuredDimension(width, height);
-    }
-
-    private void createAnim() {
-        mAnimator = ObjectAnimator.ofFloat(this, "animProgress", 0, 1);
-        mAnimator.setDuration(mAnimTime);
+        setMeasuredDimension(width + spacePadding, height);
     }
 
     public void setLike(boolean isLike) {
         liked = isLike;
+        if (!liked) {
+            animProgress = 0;
+        }
         invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int centerX = getWidth() / 2;
-        int centerY = getHeight() / 2;
+        centerY = getHeight() / 2;
+        //绘制放大圈
+        drawCircle(canvas, startX + mLikedBitmap.getWidth() / 2, centerY);
         //绘制点赞图片
         int likeTop = centerY - mUnlikeBitmap.getHeight() / 2;
         drawLike(canvas, likeTop, startX);
@@ -88,19 +76,71 @@ public class LikeImageView extends View {
         drawShining(canvas, likeTop, startX);
     }
 
-    private void drawLike(Canvas canvas, int likeTop, int likeLeft) {
-        boolean mLike = liked;
-        if (mLike && animProgress > 0.9 && animProgress < 1) {
-            canvas.save();
-            canvas.translate((float) (likeLeft - mLikedBitmap.getWidth() * 0.05), (float) (likeTop - mLikedBitmap.getHeight() * 0.05));
-            canvas.scale(1.1f, 1.1f);
-            canvas.drawBitmap(mLikedBitmap, 0, 0, mImagePaint);
-            canvas.restore();
-        } else if (mLike && animProgress > 0.5) {
-            canvas.drawBitmap(mLike ? mLikedBitmap : mUnlikeBitmap, likeLeft, likeTop, mImagePaint);
-        } else {
-            canvas.drawBitmap(mUnlikeBitmap, likeLeft, likeTop, mImagePaint);
+    private void drawCircle(Canvas canvas, int centerX, int centerY) {
+        float radius = 0;
+        int alpha = 0;
+        if (liked) {
+            //透明变实体
+            if (animProgress > 0 && animProgress <= 0.5) {
+                alpha = (int) (255 * (0.5 + animProgress));
+            } else { //实体变透明
+                alpha = (int) (255 * (1 - (animProgress - 0.5) * 2));
+            }
+            radius = (float) (0.6 + animProgress * 0.5);
         }
+        mImagePaint.setColor(Color.parseColor("#c5775c"));
+        mImagePaint.setAlpha(alpha);
+        mImagePaint.setStyle(Paint.Style.STROKE);
+        mImagePaint.setStrokeWidth(5);
+        canvas.drawCircle(centerX, centerY, radius * mLikedBitmap.getWidth() / 2, mImagePaint);
+        mImagePaint.setColor(Color.parseColor("#c3c4c3"));
+        mImagePaint.setStyle(Paint.Style.FILL);
+    }
+
+    private void drawLike(Canvas canvas, int likeTop, int likeLeft) {
+        Bitmap bitmap = null;
+        float scale = 0;
+        if (liked) {
+            //灰色一下变小
+            if (animProgress > 0 && animProgress <= 0.1) {
+                bitmap = mUnlikeBitmap;
+                scale = -0.01f;
+            }
+            //红色小且半透明 变正常过程就变成了实体
+            if (animProgress > 0.1 && animProgress <= 0.5) {
+                mImagePaint.setAlpha((int) (255 * (0.5 + animProgress)));
+            } else {
+                mImagePaint.setAlpha(255);
+            }
+            //红色放大
+            if (animProgress > 0.1 && animProgress <= 0.9) {
+                bitmap = mLikedBitmap;
+                scale = (float) (-0.01f + animProgress * 0.1);
+            }
+            //一瞬间变正常
+            if (animProgress > 0.9 || animProgress == 0) {
+                bitmap = mLikedBitmap;
+                scale = 0;
+            }
+        } else {
+            //红色缩小 变半透明
+            if (animProgress > 0 && animProgress <= 0.5) {
+                bitmap = mLikedBitmap;
+                mImagePaint.setAlpha((int) (255 * (0.5 + animProgress)));
+                scale = (float) (-animProgress * 0.1);
+            }
+            //一半的时候变灰色
+            if (animProgress > 0.5 || animProgress == 0) {
+                mImagePaint.setAlpha(255);
+                bitmap = mUnlikeBitmap;
+                scale = 0;
+            }
+        }
+        canvas.save();
+        canvas.translate((float) (likeLeft - bitmap.getWidth() * 0.05), (float) (likeTop - bitmap.getHeight() * 0.05));
+        canvas.scale(1 + scale, 1 + scale);
+        canvas.drawBitmap(bitmap, 0, 0, mImagePaint);
+        canvas.restore();
     }
 
     private void drawShining(Canvas canvas, int likeTop, int likeLeft) {

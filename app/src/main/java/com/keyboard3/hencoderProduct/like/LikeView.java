@@ -1,7 +1,12 @@
 package com.keyboard3.hencoderProduct.like;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.LinearLayout;
 
 /**
@@ -11,8 +16,11 @@ import android.widget.LinearLayout;
 
 public class LikeView extends LinearLayout {
     int spacePadding;
+    private int mAnimTime = 500;
     private LikeNumView likeNumView;
     private LikeImageView likeImageView;
+    private AnimatorSet animatorSet;
+    private boolean isLike = false;
 
     public LikeView(Context context) {
         super(context);
@@ -29,9 +37,61 @@ public class LikeView extends LinearLayout {
 
     {
         setOrientation(HORIZONTAL);
-        spacePadding = 20;
+        spacePadding = 5;
         addView(new LikeImageView(getContext()));
         addView(new LikeNumView(getContext()));
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!animatorSet.isRunning()) {
+                    likeNumView.changeLike(isLike);
+                    isLike = !isLike;
+                    likeImageView.setLike(isLike);
+                    animatorSet.start();
+                }
+            }
+        });
+    }
+
+    public void setNum(int num) {
+        likeNumView.setNum(num);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        animatorSet.end();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int mMoveY = getMeasuredHeight() / 2;
+
+        ObjectAnimator numAnimator = ObjectAnimator.ofInt(likeNumView, "translationY", 0, mMoveY);
+        numAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                likeNumView.init();
+            }
+        });
+        numAnimator.setDuration(mAnimTime);
+
+        ObjectAnimator imageAnimator = ObjectAnimator.ofFloat(likeImageView, "animProgress", 0, 1);
+        imageAnimator.setDuration(mAnimTime);
+
+        animatorSet = new AnimatorSet();
+        animatorSet.playTogether(numAnimator, imageAnimator);
+
+        setMeasuredDimension(likeNumView.getMeasuredWidth() + likeImageView.getMeasuredWidth() + spacePadding, getMeasuredHeight());
+    }
+
+    public void setLike(boolean like) {
+        isLike = like;
+        likeNumView.setLiked(isLike);
+        likeImageView.setLike(isLike);
+        invalidate();
     }
 
     @Override
@@ -39,5 +99,6 @@ public class LikeView extends LinearLayout {
         super.onAttachedToWindow();
         likeImageView = (LikeImageView) getChildAt(0);
         likeNumView = (LikeNumView) getChildAt(1);
+        likeImageView.spacePadding = spacePadding;
     }
 }
