@@ -108,77 +108,30 @@ public class LikeNumView extends View {
         //绘制数字 相对居中
         Rect rect = new Rect();
         mPaint.getTextBounds("0", 0, 1, rect);
-        drawNum(canvas, leftX, centerY - (rect.top + rect.bottom) / 2, mCurNum, mNewNum);
+        drawAnimNum(canvas, leftX, centerY - (rect.top + rect.bottom) / 2, mCurNum, mNewNum);
     }
 
-
-    private void drawNum(Canvas canvas, int leftX, int baseTxtY, int curNum, int newNum) {
+    private void drawAnimNum(Canvas canvas, int leftX, int baseTxtY, int curNum, int newNum) {
         String curNumStr = (curNum + "").toString();
         String newNumStr = (newNum + "").toString();
-        mMaxLen = Math.max(Math.max(curNumStr.length(), newNumStr.length()), mMaxLen);
-
-        if (newNum < curNum) {
-            boolean lengthChange = false;
-            if (newNumStr.length() < curNumStr.length()) {
-                lengthChange = true;
+        int len = Math.max(curNumStr.length(), newNumStr.length());
+        float charLen = mPaint.measureText("0");
+        int sumLeft = leftX;
+        String curCharTxt, newCharTxt;
+        for (int i = 0; i < len; i++) {
+            sumLeft += charLen;
+            if (i > curNumStr.length() - 1) {
+                curCharTxt = "";
+            } else {
+                curCharTxt = curNumStr.substring(i, i + 1);
             }
-            int sumLeft = leftX;
-            String tempNumStr = curNumStr;
-            for (int i = 0; i < tempNumStr.length(); i++) {
-                float len = i == 0 ? 0 : mPaint.measureText(tempNumStr.substring(i - 1, i));
-                sumLeft += len;
-                String curBitStr = curNumStr.substring(i, i + 1);
-                String newBitStr = "";
-                if (lengthChange && i == 0) {
-                    newBitStr = " ";
-                } else if (lengthChange) {
-                    newBitStr = newNumStr.substring(i - 1, i);
-                } else {
-                    newBitStr = newNumStr.substring(i, i + 1);
-                }
-                optDrawNum(canvas, sumLeft, baseTxtY, curBitStr, newBitStr, false);
+            if (i > newNumStr.length() - 1) {
+                newCharTxt = "";
+            } else {
+                newCharTxt = newNumStr.substring(i, i + 1);
             }
-        } else if (newNum > curNum) {
-            //长度发生变化
-            boolean lengthChange = false;
-            if (newNumStr.length() > curNumStr.length()) {
-                lengthChange = true;
-            }
-            int sumLeft = leftX;
-            String tempNumStr = newNumStr;
-            for (int i = 0; i < tempNumStr.length(); i++) {
-                float len = i == 0 ? 0 : mPaint.measureText(tempNumStr.substring(i - 1, i));
-                sumLeft += len;
-                String curBitStr = "";
-                if (lengthChange && i == 0) {
-                    curBitStr = " ";
-                } else if (lengthChange) {
-                    curBitStr = curNumStr.substring(i - 1, i);
-                } else {
-                    curBitStr = curNumStr.substring(i, i + 1);
-                }
-                String newBitStr = newNumStr.substring(i, i + 1);
-                optDrawNum(canvas, sumLeft, baseTxtY, curBitStr, newBitStr, true);
-            }
-        } else if (newNum == curNum) {
-            float emptyLen = mPaint.measureText("0");
-            //处理100-99 位移的情况
-            leftX += (mMaxLen - curNumStr.length()) * emptyLen;
-
-            int sumLeft = leftX;
-            String tempNumStr = curNumStr;
-            for (int i = 0; i < tempNumStr.length(); i++) {
-                float len = i == 0 ? 0 : mPaint.measureText(tempNumStr.substring(i - 1, i));
-                sumLeft += len;
-                String curBitStr = tempNumStr.substring(i, i + 1);
-                String newBitStr = tempNumStr.substring(i, i + 1);
-                optDrawNum(canvas, sumLeft, baseTxtY, curBitStr, newBitStr);
-            }
+            optDrawNum(canvas, sumLeft, baseTxtY, curCharTxt, newCharTxt, newNum > curNum);
         }
-    }
-
-    private void optDrawNum(Canvas canvas, int leftX, int baseTxtY, String curNum, String newNum) {
-        optDrawNum(canvas, leftX, baseTxtY, curNum, newNum, false);
     }
 
     private void optDrawNum(Canvas canvas, int leftX, int baseTxtY, String curNum, String newNum, boolean upOrDown) {

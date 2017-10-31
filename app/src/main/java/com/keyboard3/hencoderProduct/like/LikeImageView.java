@@ -88,10 +88,10 @@ public class LikeImageView extends View {
             }
             radius = (float) (0.6 + animProgress * 0.5);
         }
-        mImagePaint.setColor(Color.parseColor("#c5775c"));
+        mImagePaint.setColor(Color.parseColor("#cc775c"));
         mImagePaint.setAlpha(alpha);
         mImagePaint.setStyle(Paint.Style.STROKE);
-        mImagePaint.setStrokeWidth(5);
+        mImagePaint.setStrokeWidth(3);
         canvas.drawCircle(centerX, centerY, radius * mLikedBitmap.getWidth() / 2, mImagePaint);
         mImagePaint.setColor(Color.parseColor("#c3c4c3"));
         mImagePaint.setStyle(Paint.Style.FILL);

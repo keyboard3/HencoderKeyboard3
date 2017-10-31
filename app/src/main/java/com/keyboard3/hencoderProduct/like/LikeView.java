@@ -37,7 +37,7 @@ public class LikeView extends LinearLayout {
 
     {
         setOrientation(HORIZONTAL);
-        spacePadding = 5;
+        spacePadding = 0;
         addView(new LikeImageView(getContext()));
         addView(new LikeNumView(getContext()));
         setOnClickListener(new OnClickListener() {
