@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
  */
 
 public class LikeView extends LinearLayout {
-    int spacePadding;
+    private int spacePadding;
     private int mAnimTime = 500;
     private LikeNumView likeNumView;
     private LikeImageView likeImageView;

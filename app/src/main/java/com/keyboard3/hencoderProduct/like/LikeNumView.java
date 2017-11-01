@@ -22,7 +22,6 @@ public class LikeNumView extends View {
     private int translationY;
     private boolean liked = false;
     private int mMoveY;
-    private int mMaxLen = 0;
     private int mTextSize;
     private int centerX;
     private int centerY;
@@ -40,7 +39,6 @@ public class LikeNumView extends View {
     }
 
     {
-        mMaxLen = 0;
         mTextSize = (int) Utils.dpToPixel(12);
 
         mPaint.setTextSize(mTextSize);
@@ -49,7 +47,6 @@ public class LikeNumView extends View {
 
     protected void setNum(int num) {
         mCurNum = mNewNum = num;
-        mMaxLen = 0;
         invalidate();
     }
 
