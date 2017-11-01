@@ -3,7 +3,7 @@ HenCoder「仿写酷界面」活动——征稿 http://hencoder.com/activity-moc
 
 虽然本作品并未获奖，但本人还是会持续优化....，敬请关注！！！
 ### 即刻点赞
-实现原理：隔离复并用图片动画和文字动画<br>
+实现原理：隔离并复用图片动画和文字动画<br>
 LikeView自定义的LinearLayout默认组合点赞文字动画效果
 
  - **LikeImageView**
