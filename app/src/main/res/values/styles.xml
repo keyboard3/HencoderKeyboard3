@@ -1,5 +1,14 @@
 <resources>
-
+    <declare-styleable name="LikeView">
+        <attr name="likeNum" format="integer"></attr>
+        <attr name="leftPadding" format="dimension"></attr>
+        <attr name="rightPadding" format="dimension"></attr>
+        <attr name="middlePadding" format="dimension"></attr>
+        <attr name="liked" format="boolean"></attr>
+        <attr name="likeSrc" format="reference"></attr>
+        <attr name="unlikeSrc" format="reference"></attr>
+        <attr name="shiningSrc" format="reference"></attr>
+    </declare-styleable>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->

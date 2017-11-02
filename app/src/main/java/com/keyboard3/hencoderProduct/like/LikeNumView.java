@@ -23,8 +23,8 @@ public class LikeNumView extends View {
     private boolean liked = false;
     private int mMoveY;
     private int mTextSize;
-    private int centerX;
     private int centerY;
+    private float rightPadding;
 
     public LikeNumView(Context context) {
         super(context);
@@ -40,7 +40,6 @@ public class LikeNumView extends View {
 
     {
         mTextSize = (int) Utils.dpToPixel(12);
-
         mPaint.setTextSize(mTextSize);
         mPaint.setColor(Color.parseColor("#c3c4c3"));
     }
@@ -57,10 +56,11 @@ public class LikeNumView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        String curNum = mCurNum + 1 + "";
+        //保证长度足够
+        String curNum = (mCurNum + 1) * 10 + "";
         Rect rect = new Rect();
-        mPaint.getTextBounds(curNum + "0", 0, curNum.length() + 1, rect);
-        int width = rect.width();
+        mPaint.getTextBounds(curNum, 0, curNum.length(), rect);
+        float width = rect.width() + rightPadding;
         int height = mTextSize * 3;
         int heightSpecMode = View.MeasureSpec.getMode(heightMeasureSpec);
         int specSize = View.MeasureSpec.getSize(heightMeasureSpec);
@@ -73,11 +73,11 @@ public class LikeNumView extends View {
                 if (specSize > mTextSize && specSize < height) {
                     height = specSize;
                 }
+                width = Math.max(widthSpecSize, width);
                 break;
             default:
         }
-        width = Math.max(widthSpecSize, width);
-        setMeasuredDimension(width, height);
+        setMeasuredDimension((int) width, height);
         mMoveY = height / 2;
     }
 
@@ -99,10 +99,8 @@ public class LikeNumView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        centerX = getWidth() / 2;
         centerY = getHeight() / 2;
         int leftX = 0;
-        //绘制数字 相对居中
         Rect rect = new Rect();
         mPaint.getTextBounds("0", 0, 1, rect);
         drawAnimNum(canvas, leftX, centerY - (rect.top + rect.bottom) / 2, mCurNum, mNewNum);
@@ -116,7 +114,6 @@ public class LikeNumView extends View {
         int sumLeft = leftX;
         String curCharTxt, newCharTxt;
         for (int i = 0; i < len; i++) {
-            sumLeft += charLen;
             if (i > curNumStr.length() - 1) {
                 curCharTxt = "";
             } else {
@@ -128,6 +125,7 @@ public class LikeNumView extends View {
                 newCharTxt = newNumStr.substring(i, i + 1);
             }
             optDrawNum(canvas, sumLeft, baseTxtY, curCharTxt, newCharTxt, newNum > curNum);
+            sumLeft += charLen;
         }
     }
 
@@ -158,15 +156,13 @@ public class LikeNumView extends View {
         this.liked = liked;
     }
 
-    public void setDrawNum(Integer mDrawNum) {
-        this.mCurNum = mDrawNum;
-        this.mNewNum = mDrawNum;
-        invalidate();
-    }
-
     @SuppressWarnings("unused")
     public void setTranslationY(int translationY) {
         this.translationY = translationY;
         invalidate();
+    }
+
+    public void setRightPadding(float rightPadding) {
+        this.rightPadding = rightPadding;
     }
 }

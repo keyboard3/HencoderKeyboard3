@@ -6,11 +6,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-
-import com.keyboard3.hencoderProduct.R;
 
 /**
  * @author keyboard3
@@ -24,8 +23,9 @@ public class LikeImageView extends View {
     private Bitmap mUnlikeBitmap;
     private Bitmap mLikedBitmap;
     private Bitmap mShiningBitmap;
-    protected int spacePadding;
-    private int startX;
+    private float leftPadding;
+    private float middlePadding;
+    private float startX;
     private int centerY;
 
     public LikeImageView(Context context) {
@@ -42,17 +42,14 @@ public class LikeImageView extends View {
 
     {
         mImagePaint.setColor(Color.parseColor("#c3c4c3"));
-        mUnlikeBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_messages_like_unselected);
-        mLikedBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_messages_like_selected);
-        mShiningBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_messages_like_selected_shining);
-        startX = (int) (mLikedBitmap.getWidth() * 0.1) + spacePadding / 2;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        startX = mLikedBitmap.getWidth() * 0.1f + leftPadding;
         int width = (int) (mLikedBitmap.getWidth() * 1.1);
         int height = mLikedBitmap.getHeight() + mShiningBitmap.getHeight();
-        setMeasuredDimension(width + spacePadding, height);
+        setMeasuredDimension((int) (width + leftPadding + middlePadding), height);
     }
 
     public void setLike(boolean isLike) {
@@ -68,12 +65,12 @@ public class LikeImageView extends View {
         super.onDraw(canvas);
         centerY = getHeight() / 2;
         //绘制放大圈
-        drawCircle(canvas, startX + mLikedBitmap.getWidth() / 2, centerY);
+        drawCircle(canvas, (int) (startX + mLikedBitmap.getWidth() / 2), centerY);
         //绘制点赞图片
         int likeTop = centerY - mUnlikeBitmap.getHeight() / 2;
-        drawLike(canvas, likeTop, startX);
+        drawLike(canvas, likeTop, (int) startX);
         //绘制闪光
-        drawShining(canvas, likeTop, startX);
+        drawShining(canvas, likeTop, (int) startX);
     }
 
     private void drawCircle(Canvas canvas, int centerX, int centerY) {
@@ -86,7 +83,7 @@ public class LikeImageView extends View {
             } else { //实体变透明
                 alpha = (int) (255 * (1 - (animProgress - 0.5) * 2));
             }
-            radius = (float) (0.6 + animProgress * 0.5);
+            radius = (float) (0.6 + animProgress * 0.7);
         }
         mImagePaint.setColor(Color.parseColor("#cc775c"));
         mImagePaint.setAlpha(alpha);
@@ -161,5 +158,25 @@ public class LikeImageView extends View {
     public void setAnimProgress(float animProgress) {
         this.animProgress = animProgress;
         invalidate();
+    }
+
+    public void setMiddlePadding(float middlePadding) {
+        this.middlePadding = middlePadding;
+    }
+
+    public void setLeftPadding(float leftPadding) {
+        this.leftPadding = leftPadding;
+    }
+
+    public void setUnlikeSrc(@IdRes int unlikeSrc) {
+        mUnlikeBitmap = BitmapFactory.decodeResource(getResources(), unlikeSrc);
+    }
+
+    public void setLikedSrc(@IdRes int likeSrc) {
+        mLikedBitmap = BitmapFactory.decodeResource(getResources(), likeSrc);
+    }
+
+    public void setShiningdSrc(@IdRes int shiningSrc) {
+        mShiningBitmap = BitmapFactory.decodeResource(getResources(), shiningSrc);
     }
 }

@@ -1,35 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.keyboard3.hencoderProduct.like.LikeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.keyboard3.hencoderProduct.like.LikeView
-        android:id="@+id/objectAnimatorView"
-        android:layout_width="45dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="#2B2B2B">
-    </com.keyboard3.hencoderProduct.like.LikeView>
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/editNum"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:background="#fff"
-        android:gravity="center_horizontal"
-        android:inputType="number"
-        android:text="29" />
+        <com.keyboard3.hencoderProduct.like.LikeView
+            android:id="@+id/objectAnimatorView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:background="#2B2B2B"
+            app:leftPadding="5dp"
+            app:likeNum="9"
+            app:likeSrc="@mipmap/ic_messages_like_selected"
+            app:middlePadding="5dp"
+            app:rightPadding="5dp"
+            app:shiningSrc="@mipmap/ic_messages_like_selected_shining"
+            app:unlikeSrc="@mipmap/ic_messages_like_unselected" />
+
+        <com.keyboard3.hencoderProduct.like.LikeView
+            android:id="@+id/objectAnimatorView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:background="#2B2B2B"
+            app:leftPadding="5dp"
+            app:likeNum="239"
+            app:likeSrc="@mipmap/ic_messages_like_selected"
+            app:middlePadding="5dp"
+            app:rightPadding="5dp"
+            app:shiningSrc="@mipmap/ic_messages_like_selected_shining"
+            app:unlikeSrc="@mipmap/ic_messages_like_unselected" />
+
+        <com.keyboard3.hencoderProduct.like.LikeView
+            android:id="@+id/objectAnimatorView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:background="#2B2B2B"
+            app:leftPadding="5dp"
+            app:likeNum="100000"
+            app:likeSrc="@mipmap/ic_messages_like_selected"
+            app:liked="true"
+            app:middlePadding="5dp"
+            app:rightPadding="5dp"
+            app:shiningSrc="@mipmap/ic_messages_like_selected_shining"
+            app:unlikeSrc="@mipmap/ic_messages_like_unselected" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/animateBt"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="8dp"
-        android:text="set"
+        android:text="anim"
         android:textSize="16sp" />
 
 </com.keyboard3.hencoderProduct.like.LikeLayout>

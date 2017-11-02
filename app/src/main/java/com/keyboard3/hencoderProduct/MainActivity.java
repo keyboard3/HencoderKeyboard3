@@ -1,6 +1,8 @@
 package com.keyboard3.hencoderProduct;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.MessageQueue;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;

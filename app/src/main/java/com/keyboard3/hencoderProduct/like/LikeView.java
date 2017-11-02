@@ -5,9 +5,12 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import com.keyboard3.hencoderProduct.R;
 
 /**
  * @author keyboard3
@@ -15,7 +18,6 @@ import android.widget.LinearLayout;
  */
 
 public class LikeView extends LinearLayout {
-    private int spacePadding;
     private int mAnimTime = 500;
     private LikeNumView likeNumView;
     private LikeImageView likeImageView;
@@ -27,19 +29,37 @@ public class LikeView extends LinearLayout {
     }
 
     public LikeView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-
+        this(context, attrs, 0);
     }
 
     public LikeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        final TypedArray custom = context.obtainStyledAttributes(
+                attrs, R.styleable.LikeView, defStyleAttr, 0);
+        int likeNum = custom.getInt(R.styleable.LikeView_likeNum, 0);
+        boolean liked = custom.getBoolean(R.styleable.LikeView_liked, false);
+        float leftPadding = custom.getDimension(R.styleable.LikeView_leftPadding, 0);
+        float middlePadding = custom.getDimension(R.styleable.LikeView_middlePadding, 0);
+        float rightPadding = custom.getDimension(R.styleable.LikeView_rightPadding, 0);
+        int likeSrc = custom.getResourceId(R.styleable.LikeView_likeSrc, R.mipmap.ic_messages_like_selected);
+        int unlikeSrc = custom.getResourceId(R.styleable.LikeView_unlikeSrc, R.mipmap.ic_messages_like_unselected);
+        int shiningSrc = custom.getResourceId(R.styleable.LikeView_shiningSrc, R.mipmap.ic_messages_like_selected_shining);
+        likeImageView.setShiningdSrc(shiningSrc);
+        likeImageView.setLikedSrc(likeSrc);
+        likeImageView.setUnlikeSrc(unlikeSrc);
+        likeNumView.setRightPadding(rightPadding);
+        likeImageView.setLeftPadding(leftPadding);
+        likeImageView.setMiddlePadding(middlePadding);
+        likeNumView.setNum(likeNum);
+        setLike(liked);
     }
 
     {
         setOrientation(HORIZONTAL);
-        spacePadding = 0;
-        addView(new LikeImageView(getContext()));
-        addView(new LikeNumView(getContext()));
+        likeImageView = new LikeImageView(getContext());
+        addView(likeImageView);
+        likeNumView = new LikeNumView(getContext());
+        addView(likeNumView);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +104,7 @@ public class LikeView extends LinearLayout {
         animatorSet = new AnimatorSet();
         animatorSet.playTogether(numAnimator, imageAnimator);
 
-        setMeasuredDimension(likeNumView.getMeasuredWidth() + likeImageView.getMeasuredWidth() + spacePadding, getMeasuredHeight());
+        setMeasuredDimension(likeImageView.getMeasuredWidth() + likeNumView.getMeasuredWidth(), getMeasuredHeight());
     }
 
     public void setLike(boolean like) {
@@ -92,13 +112,5 @@ public class LikeView extends LinearLayout {
         likeNumView.setLiked(isLike);
         likeImageView.setLike(isLike);
         invalidate();
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        likeImageView = (LikeImageView) getChildAt(0);
-        likeNumView = (LikeNumView) getChildAt(1);
-        likeImageView.spacePadding = spacePadding;
     }
 }
