@@ -36,6 +36,7 @@ LikeView自定义的LinearLayout默认组合点赞文字动画效果
     app:shiningSrc="@mipmap/ic_messages_like_selected_shining"
     app:unlikeSrc="@mipmap/ic_messages_like_unselected" />
 ```
+
 ![](images/like.gif)
 
 ### 薄荷健康尺
