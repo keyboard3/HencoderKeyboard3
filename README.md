@@ -4,7 +4,7 @@
 ## 下载
 [demo.apk](http://download.fir.im/v2/app/install/59ec1e90ca87a8350800015f?download_token=0dddd880e3eebbc0bbfd62afb4aac0e3&source=update)
 ## 即刻点赞
-<img src=images/like.gif" width="350"><br>
+<img src="images/like.gif" width="350"><br>
 实现原理：隔离并复用图片动画和文字动画<br>
 LikeView自定义的LinearLayout默认组合点赞文字动画效果
 
@@ -40,13 +40,13 @@ LikeView自定义的LinearLayout默认组合点赞文字动画效果
 ```
 
 ## 薄荷健康尺
-<img src=images/ruler.gif" width="350">
+<img src="images/ruler.gif" width="350">
 
 ## 小米运动
-<img src=images/miMove.gif" width="350">
+<img src="images/miMove.gif" width="350">
 
 ## Fliboard 翻页效果
-<img src=images/flipboard.gif" width="350">
+<img src="images/flipboard.gif" width="350">
 
 ## 关于我
 
