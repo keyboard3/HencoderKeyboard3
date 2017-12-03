@@ -1,5 +1,5 @@
 # HencoderKeyboard3
-HenCoder「仿写酷界面」活动——征稿 http://hencoder.com/activity-mock-1 <br>
+[HenCoder「仿写酷界面」活动——征稿](http://hencoder.com/activity-mock-1) <br>
 虽然本作品并未获奖，但本人还是会持续优化....，敬请关注！！！
 ## 下载
 [demo.apk](http://download.fir.im/v2/app/install/59ec1e90ca87a8350800015f?download_token=0dddd880e3eebbc0bbfd62afb4aac0e3&source=update)
