@@ -1,11 +1,15 @@
 # HencoderKeyboard3
 [HenCoder「仿写酷界面」活动——征稿](http://hencoder.com/activity-mock-1) <br>
 虽然本作品并未获奖，但本人还是会持续优化....，敬请关注！！！
+
 ## 下载
 [demo.apk](http://download.fir.im/v2/app/install/59ec1e90ca87a8350800015f?download_token=0dddd880e3eebbc0bbfd62afb4aac0e3&source=update)
+
 ## 即刻点赞
-<img src="images/like.gif" width="350"><br>
-实现原理：隔离并复用图片动画和文字动画<br>
+### 截图
+<img src="images/like.gif" width="350"><br> 
+### 原理
+隔离并复用图片动画和文字动画<br>
 LikeView自定义的LinearLayout默认组合点赞文字动画效果
 
  - **LikeImageView**
@@ -21,7 +25,7 @@ LikeView自定义的LinearLayout默认组合点赞文字动画效果
  - **LikeNumView** [简化了文字实现逻辑]
 <br>点赞和取消赞动作导致的文字变化 转变成 原数字->新数字。点赞和取消赞时改动新数字的值(+1/-1)。将两个数字动转为字符串数组，从高位开始循环 如果数字相同就直接画数字，如果数字不同就开始绘制两个数字位移同时设置对应的透明渐变`
 
-**使用代码**
+### 使用
 ```
 <com.keyboard3.hencoderProduct.like.LikeView
     android:id="@+id/objectAnimatorView1"
