@@ -50,3 +50,8 @@ LikeView自定义的LinearLayout默认组合点赞文字动画效果
 ## Fliboard 翻页效果
 
 ![](images/flipboard.gif)
+
+## 关于我
+
+简书 [keyboard3](http://www.jianshu.com/users/62329de8c8a6/latest_articles)<br>
+邮箱 keyboard3@icloud.com
