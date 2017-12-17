@@ -1,6 +1,6 @@
 # HencoderKeyboard3
 [HenCoder「仿写酷界面」活动——征稿](http://hencoder.com/activity-mock-1) <br>
-虽然本作品并未获奖，但本人还是会持续优化....，敬请关注！！！
+虽然4个作品均未命中奖项，但本人还是会持续优化....，敬请关注！！！
 ## 下载
 [demo.apk](app/build/outputs/apk/debug/app-debug.apk)
 
