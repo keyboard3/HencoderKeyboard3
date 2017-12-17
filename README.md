@@ -1,7 +1,8 @@
-本作品为参加Hencoder投稿比赛之作
-HenCoder「仿写酷界面」活动——征稿 http://hencoder.com/activity-mock-1
-
+# HencoderKeyboard3
+[HenCoder「仿写酷界面」活动——征稿](http://hencoder.com/activity-mock-1) <br>
 虽然本作品并未获奖，但本人还是会持续优化....，敬请关注！！！
+## 下载
+[demo.apk](app/build/outputs/apk/debug/app-debug.apk)
 
 # 即刻点赞
 - 写在前面
@@ -28,6 +29,7 @@ LikeImageView
     红色图标变小至0.9倍且变成半透明 动画完成到一半时变成灰色的正常大小
 闪光动画
     点赞时 闪光图标在点赞图标顶部的某个位置，先由小到大直至正常大小
+
 LikeNumView
     点赞和取消赞动作导致的文字变化 转变成 原数字->新数字。点赞和取消赞时改动新数字的值(+1/-1)。将两个数字动转为字符串数组，从高位开始循环 如果数字相同就直接画数字，如果数字不同就开始绘制两个数字位移同时设置对应的透明渐变`
 ```
@@ -37,7 +39,9 @@ LikeNumView
     点赞散开点并没有做处理
 我主要是在我原来的基础上将基本特效都实现了，包括点赞散开的效果
 ```
-![](images/like.gif)
+## 截图
+<img src="images/like.gif" width="350"><br>
+
 # 薄荷健康尺
 
 - 写在前面
@@ -62,13 +66,19 @@ LikeNumView
     2.监听刻度值的View可以做的更加解耦一些，rulerView和rulerNumberView可以做到n:n
 我这里在他的作品之上做了上面我所说的改造，因为时间关系我阉割了他边界阴影效果
 ```
+## 截图
+<img src="images/ruler.gif" width="350">
 
-![](images/ruler.gif)
+## 薄荷健康尺
 
-### 小米运动
 
-![](images/miMove.gif)
+## 小米运动
+<img src="images/miMove.gif" width="350">
 
-### Fliboard 翻页效果
+## Fliboard 翻页效果
+<img src="images/flipboard.gif" width="350">
 
-![](images/flipboard.gif)
+## 关于我
+
+简书 [keyboard3](http://www.jianshu.com/users/62329de8c8a6/latest_articles)<br>
+邮箱 keyboard3@icloud.com
