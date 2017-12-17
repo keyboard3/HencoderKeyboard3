@@ -10,7 +10,7 @@ import com.keyboard3.hencoderProduct.R;
 
 
 public class RulerLayout extends RelativeLayout {
-    RulerView view;
+    RulerNumberView view;
     Button animateBt;
 
     public RulerLayout(Context context) {
@@ -28,21 +28,5 @@ public class RulerLayout extends RelativeLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
-        view = (RulerView) findViewById(R.id.objectAnimatorView);
-        animateBt = (Button) findViewById(R.id.animateBt);
-
-        OnClickListener listener = new OnClickListener() {
-
-            private int translationX = 600;
-
-            @Override
-            public void onClick(View v) {
-                translationX += 600;
-                view.moveTranslationX(translationX);
-            }
-        };
-        animateBt.setOnClickListener(listener);
-        view.setOnClickListener(listener);
     }
 }

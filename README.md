@@ -37,6 +37,39 @@ LikeView自定义的LinearLayout默认组合点赞文字动画效果
     app:unlikeSrc="@mipmap/ic_messages_like_unselected" />
 ```
 
+实现原理
+```
+子View：子View实现fling效果
+	边界条件：
+		min-max 起始端线止于中间刻度
+		滑动到小数位置自动调整到整数位置
+		留白控制
+	绘制准备：
+		颜色：上下边界线颜色、背景颜色、刻度线颜色、大刻度上文字颜色
+		width：小刻度宽度、大刻度宽度
+		height:小刻度高度、大刻度高度
+		起止刻度值：开始刻度值、终止刻度值、单位长度
+		size:文字大小
+		padding:文字距离尺子底部距离
+	绘制方向处理：刻度线的终点坐标以及文字起始坐标
+	    左布局→：x+height
+	    上布局↓：y+height
+	    右布局←：x-height
+	    下布局↑：y-height
+	绘制逻辑：
+		尺子背景：边界线+背景色
+		尺子刻度：绘制min-max中所有刻度，循环(max-min)*10个刻度 判断如果是10%的倍数就花大刻度并在此之上画上刻度值
+	滑动逻辑：通过VelocityTracker获得水平滑动速度交给Scroller滚动到这个速度最终的位置
+		down:停止之前的滚动动画并重新记录VelocityTracker
+		move:移动内容
+		up/cancel:计算速度开始滚动
+父ViewGroup：绘制中间定格线
+	交互逻辑：
+		分发触摸事件给子View
+
+刻度显示View:监听子View的滑动刻度
+	解耦彻底：监听对象指向子View，子View滑动刻度通知给父View重绘内容
+```
 ![](images/like.gif)
 
 ### 薄荷健康尺

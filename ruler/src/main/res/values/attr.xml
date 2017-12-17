@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BooheeRuler">
+        <attr name="minScale" format="integer" />
+        <attr name="maxScale" format="integer" />
+        <attr name="smallScaleLength" format="dimension" />
+        <attr name="smallScaleWidth" format="dimension" />
+        <attr name="bigScaleLength" format="dimension" />
+        <attr name="bigScaleWidth" format="dimension" />
+        <attr name="cursorHeight" format="dimension" />
+        <attr name="cursorWidth" format="dimension" />
+        <attr name="textMarginHead" format="dimension" />
+        <attr name="numberTextSize" format="dimension" />
+        <attr name="scaleInterval" format="dimension" />
+        <attr name="numberTextColor" format="color" />
+        <attr name="scaleColor" format="color" />
+        <attr name="cursorDrawable" format="dimension" />
+        <attr name="currentScale" format="float" />
+        <attr name="paddingStartAndEnd" format="dimension" />
+        <attr name="count" format="integer" />
+        <attr name="rulerStyle" format="enum">
+            <enum name="left" value="0" />
+            <enum name="top" value="1" />
+            <enum name="right" value="2" />
+            <enum name="bottom" value="3" />
+        </attr>
+        <attr name="rulerBackGround" format="reference|color" />
+        <attr name="canEdgeEffect" format="boolean" />
+        <attr name="edgeColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="KgNumberLayout">
+        <attr name="scaleTextSize" format="dimension" />
+        <attr name="kgTextSize" format="dimension" />
+        <attr name="scaleTextColor" format="color" />
+        <attr name="kgTextColor" format="color" />
+        <attr name="kgUnitText" format="string" />
+        <attr name="targetRuler" format="reference" />
+    </declare-styleable>
+</resources>

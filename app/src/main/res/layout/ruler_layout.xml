@@ -1,13 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.keyboard3.hencoderProduct.ruler.RulerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.keyboard3.hencoderProduct.ruler.RulerView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <yanzhikai.ruler.RulerNumberLayout
+            android:id="@+id/knl_bottom_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:kgTextSize="20sp"
+            app:scaleTextSize="50sp"
+            app:targetRuler="@id/br_bottom_head" />
+
+        <yanzhikai.ruler.BooheeRuler
+            android:id="@+id/br_bottom_head"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            app:bigScaleLength="40dp"
+            app:bigScaleWidth="2.5dp"
+            app:count="10"
+            app:currentScale="666666"
+            app:cursorDrawable="@drawable/cursor_shape"
+            app:cursorHeight="45dp"
+            app:cursorWidth="4dp"
+            app:maxScale="2000000"
+            app:minScale="464"
+            app:numberTextSize="22sp"
+            app:paddingStartAndEnd="10dp"
+            app:rulerStyle="bottom"
+            app:scaleInterval="11.5dp"
+            app:smallScaleLength="20dp"
+            app:smallScaleWidth="1.5dp"
+            app:textMarginHead="70dp" />
+    </LinearLayout>
+
+    <com.keyboard3.hencoderProduct.ruler.RulerNumberView
         android:id="@+id/objectAnimatorView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/animateBt"
@@ -17,6 +56,7 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="8dp"
         android:text="@string/animate"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="gone" />
 
 </com.keyboard3.hencoderProduct.ruler.RulerLayout>

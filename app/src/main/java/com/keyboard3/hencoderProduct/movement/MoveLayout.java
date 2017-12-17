@@ -2,9 +2,11 @@ package com.keyboard3.hencoderProduct.movement;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Scroller;
 
 import com.keyboard3.hencoderProduct.R;
 
