@@ -10,9 +10,6 @@ import com.keyboard3.hencoderProduct.R;
 
 
 public class RulerLayout extends RelativeLayout {
-    RulerNumberView view;
-    Button animateBt;
-
     public RulerLayout(Context context) {
         super(context);
     }
@@ -25,8 +22,4 @@ public class RulerLayout extends RelativeLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-    }
 }

@@ -10,16 +10,15 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <yanzhikai.ruler.RulerNumberLayout
+        <com.keyboard3.RulerNumberLayout
             android:id="@+id/knl_bottom_head"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:kgTextSize="20sp"
-            app:scaleTextSize="50sp"
-            app:targetRuler="@id/br_bottom_head" />
+            app:scaleTextSize="50sp" />
 
-        <yanzhikai.ruler.BooheeRuler
-            android:id="@+id/br_bottom_head"
+        <com.keyboard3.BooheeRuler
+            android:id="@+id/br_top_head"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
@@ -34,29 +33,97 @@
             app:minScale="464"
             app:numberTextSize="22sp"
             app:paddingStartAndEnd="10dp"
+            app:rulerStyle="top"
+            app:scaleInterval="11.5dp"
+            app:smallScaleLength="20dp"
+            app:smallScaleWidth="1.5dp"
+            app:targetRulerNumber="@id/knl_bottom_head"
+            app:textMarginHead="70dp" />
+
+        <com.keyboard3.BooheeRuler
+            android:id="@+id/br_bottom_head"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            app:bigScaleLength="40dp"
+            app:bigScaleWidth="2.5dp"
+            app:count="10"
+            app:currentScale="3456"
+            app:cursorDrawable="@drawable/cursor_shape"
+            app:cursorHeight="45dp"
+            app:cursorWidth="4dp"
+            app:maxScale="2000000"
+            app:minScale="464"
+            app:numberTextSize="22sp"
+            app:paddingStartAndEnd="10dp"
             app:rulerStyle="bottom"
             app:scaleInterval="11.5dp"
             app:smallScaleLength="20dp"
             app:smallScaleWidth="1.5dp"
+            app:targetRulerNumber="@id/knl_bottom_head"
             app:textMarginHead="70dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <com.keyboard3.BooheeRuler
+                android:id="@+id/br_left_head"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                app:bigScaleLength="40dp"
+                app:bigScaleWidth="2.5dp"
+                app:count="10"
+                app:currentScale="23"
+                app:cursorDrawable="@drawable/cursor_shape"
+                app:cursorHeight="45dp"
+                app:cursorWidth="4dp"
+                app:maxScale="2000000"
+                app:minScale="464"
+                app:numberTextSize="22sp"
+                app:paddingStartAndEnd="10dp"
+                app:rulerStyle="left"
+                app:scaleInterval="11.5dp"
+                app:smallScaleLength="20dp"
+                app:smallScaleWidth="1.5dp"
+                app:targetRulerNumber="@id/knl_bottom_head"
+                app:textMarginHead="70dp" />
+
+            <com.keyboard3.RulerNumberLayout
+                android:id="@+id/knl_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:kgTextSize="20sp"
+                app:kgUnitText="km"
+                app:scaleTextSize="50sp"
+                app:targetRuler="@id/br_bottom_head" />
+
+            <com.keyboard3.BooheeRuler
+                android:id="@+id/br_right_head"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                app:bigScaleLength="40dp"
+                app:bigScaleWidth="2.5dp"
+                app:count="10"
+                app:currentScale="99"
+                app:cursorDrawable="@drawable/cursor_shape"
+                app:cursorHeight="45dp"
+                app:cursorWidth="4dp"
+                app:maxScale="2000000"
+                app:minScale="464"
+                app:numberTextSize="22sp"
+                app:paddingStartAndEnd="10dp"
+                app:rulerStyle="right"
+                app:scaleInterval="11.5dp"
+                app:smallScaleLength="20dp"
+                app:smallScaleWidth="1.5dp"
+                app:targetRulerNumber="@id/knl_bottom_head"
+                app:textMarginHead="70dp" />
+        </LinearLayout>
     </LinearLayout>
-
-    <com.keyboard3.hencoderProduct.ruler.RulerNumberView
-        android:id="@+id/objectAnimatorView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-
-    <Button
-        android:id="@+id/animateBt"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="8dp"
-        android:text="@string/animate"
-        android:textSize="16sp"
-        android:visibility="gone" />
-
 </com.keyboard3.hencoderProduct.ruler.RulerLayout>

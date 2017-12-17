@@ -1,4 +1,4 @@
-package yanzhikai.ruler;
+package com.keyboard3;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -1,12 +1,14 @@
-package yanzhikai.ruler;
+package com.keyboard3;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
+import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
@@ -46,6 +48,8 @@ public class BooheeRuler extends ViewGroup {
     private int mTextMarginHead = 120;
     //刻度间隔
     private int mInterval = 18;
+    private @IdRes
+    int mTargetRulerNumer;
     //数字Text颜色
     private
     @ColorInt
@@ -124,6 +128,7 @@ public class BooheeRuler extends ViewGroup {
         mCurrentScale = typedArray.getFloat(R.styleable.BooheeRuler_currentScale, (mMaxScale + mMinScale) / 2);
         mCount = typedArray.getInt(R.styleable.BooheeRuler_count, mCount);
         mCursorDrawable = typedArray.getDrawable(R.styleable.BooheeRuler_cursorDrawable);
+        mTargetRulerNumer = typedArray.getResourceId(R.styleable.BooheeRuler_targetRulerNumber, 0);
         if (mCursorDrawable == null) {
             mCursorDrawable = getResources().getDrawable(R.drawable.cursor_shape);
         }
@@ -144,7 +149,7 @@ public class BooheeRuler extends ViewGroup {
         paddingHeadAndEnd();
 
         //设置全屏，加入InnerRuler
-        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         mInnerRuler.setLayoutParams(layoutParams);
         addView(mInnerRuler);
         //设置ViewGroup可画
@@ -180,12 +185,12 @@ public class BooheeRuler extends ViewGroup {
                                 , (getWidth() + mCursorWidth) / 2, getHeight());
                         break;
                     case LEFT_LAYOUT:
-                        mCursorDrawable.setBounds(0, (getHeight() - mCursorHeight) / 2
-                                , mCursorWidth, (getHeight() + mCursorHeight) / 2);
+                        mCursorDrawable.setBounds(0, (getHeight() - mCursorWidth) / 2
+                                , mCursorHeight, (getHeight() + mCursorWidth) / 2);
                         break;
                     case RIGHT_LAYOUT:
-                        mCursorDrawable.setBounds(getWidth() - mCursorWidth, (getHeight() - mCursorHeight) / 2
-                                , getWidth(), (getHeight() + mCursorHeight) / 2);
+                        mCursorDrawable.setBounds(getWidth() - mCursorHeight, (getHeight() - mCursorWidth) / 2
+                                , getWidth(), (getHeight() + mCursorWidth) / 2);
                         break;
                     default:
                 }
@@ -246,6 +251,18 @@ public class BooheeRuler extends ViewGroup {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         initDrawable();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mTargetRulerNumer != 0) {
+            View view = getRootView().findViewById(mTargetRulerNumer);
+            if (view instanceof RulerCallback) {
+                RulerCallback callback = (RulerCallback) view;
+                addCallback(callback);
+            }
+        }
     }
 
     public int getEdgeColor() {

@@ -1,4 +1,4 @@
-package yanzhikai.ruler;
+package com.keyboard3;
 
 /**
  * Created by yany on 2017/10/16.

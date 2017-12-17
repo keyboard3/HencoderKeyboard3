@@ -15,6 +15,7 @@
         <attr name="numberTextColor" format="color" />
         <attr name="scaleColor" format="color" />
         <attr name="cursorDrawable" format="dimension" />
+        <attr name="targetRulerNumber" format="reference" />
         <attr name="currentScale" format="float" />
         <attr name="paddingStartAndEnd" format="dimension" />
         <attr name="count" format="integer" />
@@ -29,7 +30,7 @@
         <attr name="edgeColor" format="color" />
     </declare-styleable>
 
-    <declare-styleable name="KgNumberLayout">
+    <declare-styleable name="RulerNumberLayout">
         <attr name="scaleTextSize" format="dimension" />
         <attr name="kgTextSize" format="dimension" />
         <attr name="scaleTextColor" format="color" />
