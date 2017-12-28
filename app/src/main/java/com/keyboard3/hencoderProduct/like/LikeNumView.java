@@ -62,21 +62,8 @@ public class LikeNumView extends View {
         mPaint.getTextBounds(curNum, 0, curNum.length(), rect);
         float width = rect.width() + rightPadding;
         int height = mTextSize * 3;
-        int heightSpecMode = View.MeasureSpec.getMode(heightMeasureSpec);
-        int specSize = View.MeasureSpec.getSize(heightMeasureSpec);
         int widthSpecSize = View.MeasureSpec.getSize(widthMeasureSpec);
-        switch (heightSpecMode) {
-            case MeasureSpec.UNSPECIFIED:
-            case MeasureSpec.AT_MOST:
-                break;
-            case MeasureSpec.EXACTLY:
-                if (specSize > mTextSize && specSize < height) {
-                    height = specSize;
-                }
-                width = Math.max(widthSpecSize, width);
-                break;
-            default:
-        }
+        width = resolveSize((int) width, widthSpecSize);
         setMeasuredDimension((int) width, height);
         mMoveY = height / 2;
     }

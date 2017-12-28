@@ -76,7 +76,7 @@ public class LikeImageView extends View {
     private void drawCircle(Canvas canvas, int centerX, int centerY) {
         float radius = 0;
         int alpha = 0;
-        if (liked) {
+        if (liked&&animProgress > 0) {
             //透明变实体
             if (animProgress > 0 && animProgress <= 0.5) {
                 alpha = (int) (255 * (0.5 + animProgress));
@@ -141,7 +141,7 @@ public class LikeImageView extends View {
     }
 
     private void drawShining(Canvas canvas, int likeTop, int likeLeft) {
-        if (liked) {
+        if (liked&&animProgress > 0) {
             float scale = animProgress;
             int shiningTop = (int) (likeTop - scale * mShiningBitmap.getHeight() / 2);
             int shiningLeft = (int) (likeLeft + (mLikedBitmap.getWidth() - scale * mShiningBitmap.getWidth()) / 2);
